@@ -1,0 +1,45 @@
+
+
+version: '3.8'
+
+
+services:
+
+  eureka-discovery-server:
+    image: durutheguru/eureka-discovery-server:latest
+    restart: always
+    ports:
+      - "8761:8761"
+    stdin_open: true
+    tty: true
+    networks:
+      - docker-net
+
+
+  mongodb:
+    image: mongo
+    restart: always
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/db --quiet 1
+      interval: 10s
+      timeout: 300s
+      retries: 20
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pwd
+    ports:
+      - "27017:27017"
+    volumes:
+      - db:/var/lib/mongodb
+    networks:
+      - docker-net
+
+
+volumes:
+  db:
+
+
+networks:
+  docker-net:
+
+
