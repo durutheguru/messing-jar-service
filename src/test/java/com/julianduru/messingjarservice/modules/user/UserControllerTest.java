@@ -6,13 +6,11 @@ import com.julianduru.util.JSONUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.test.StepVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * created by julian on 28/08/2022
@@ -22,10 +20,6 @@ public class UserControllerTest extends BaseControllerTest {
 
     @Autowired
     private UserDtoProvider userDtoProvider;
-
-
-    @Autowired
-    private WebTestClient webTestClient;
 
 
     @Autowired
@@ -40,6 +34,7 @@ public class UserControllerTest extends BaseControllerTest {
 //                .content(JSONUtil.asJsonString(userDtoProvider.provide()))
 //        ).andDo(print())
 //            .andExpect(status().is2xxSuccessful());
+
 
         var userDto = userDtoProvider.provide();
 

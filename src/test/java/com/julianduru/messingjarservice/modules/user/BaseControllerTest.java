@@ -1,23 +1,27 @@
 package com.julianduru.messingjarservice.modules.user;
 
 import com.github.javafaker.Faker;
+import com.julianduru.messingjarservice.config.TestConfig;
 import com.julianduru.messingjarservice.config.TestDataSourceConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import reactor.core.publisher.Mono;
 
 /**
  * created by julian on 28/08/2022
@@ -27,16 +31,17 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ExtendWith({SpringExtension.class})
 @SpringBootTest(
     classes = {
+        TestConfig.class,
         TestDataSourceConfig.class,
     },
     webEnvironment =  SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-@AutoConfigureMockMvc
 public class BaseControllerTest {
 
 
     @Autowired
-    protected MockMvc mockMvc;
+//    @Qualifier("loggingWebClient")
+    protected WebTestClient webTestClient;
 
 
     protected Faker faker = new Faker();
@@ -56,14 +61,42 @@ public class BaseControllerTest {
         mongoDBContainer.waitingFor(Wait.forListeningPort());
     }
 
-//    static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-//        public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-//            TestPropertyValues.of(
-//                "spring.data.mongodb.host", mongoDBContainer.getHost(),
-//                "spring.data.mongodb.port", String.valueOf(mongoDBContainer.getFirstMappedPort())
-//            ).applyTo(configurableApplicationContext.getEnvironment());
-//        }
+
+//    @BeforeEach
+//    public void beforeEach() {
+//        this.webTestClient = webTestClient.mutate()
+//            .filter(logRequest())
+//            .filter(logResponse())
+//            .build();
 //    }
+
+
+
+    protected ExchangeFilterFunction logRequest() {
+        return (clientRequest, next) -> {
+            log.info("Request: {} {}", clientRequest.method(), clientRequest.url());
+            log.info("Headers...");
+            clientRequest.headers()
+                .forEach((name, values) -> values.forEach(value -> log.info("{}={}", name, value)));
+
+            log.info("Body: {}", clientRequest.body());
+
+            return next.exchange(clientRequest);
+        };
+    }
+
+
+    protected ExchangeFilterFunction logResponse() {
+        return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
+            clientResponse
+                .bodyToMono(new ParameterizedTypeReference<String>() {})
+                .doOnNext((body) -> log.info("Response: {}", body));
+
+            return Mono.just(clientResponse);
+        });
+    }
+
+
 
 
 }
