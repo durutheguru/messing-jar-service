@@ -9,8 +9,6 @@ import org.springframework.http.MediaType;
 import reactor.test.StepVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 /**
  * created by julian on 28/08/2022
@@ -44,11 +42,16 @@ public class UserControllerTest extends BaseControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(JSONUtil.asJsonString(userDto))
             .exchange()
-            .expectStatus().is2xxSuccessful();
+            .expectStatus().is2xxSuccessful()
+            .expectBody()
+            .consumeWith(System.out::println);
 
         StepVerifier
             .create(userRepository.findByUsername(userDto.getUsername()))
-            .expectNextMatches(u -> u.getUsername().equalsIgnoreCase(userDto.getUsername()))
+            .expectNextMatches(u -> {
+                assertThat(u.getUsername()).isEqualTo(userDto.getUsername());
+                return true;
+            })
             .verifyComplete();
     }
 

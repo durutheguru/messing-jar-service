@@ -15,39 +15,25 @@ import reactor.core.publisher.Mono;
 public class TestConfig {
 
 
-//    @Autowired
-//    ApplicationContext applicationContext;
-
-
-//    @Bean(name = "loggingWebClient")
-//    public WebTestClient loggingWebClient() {
-//        return WebTestClient.bindToServer()
-//            .build()
-//            .mutate()
-//            .filter(logRequest())
-//            .filter(logResponse())
-//            .build();
-//    }
-
-
-//    @Bean(name = "loggingWebClient")
-//    public WebTestClient loggingWebClient(ApplicationContext applicationContext) {
-//        return WebTestClient.bindToApplicationContext(applicationContext)
-//            .build()
-//            .mutate()
-//            .filter(logRequest())
-//            .filter(logResponse())
-//            .build();
-//    }
-//
-//
     private ExchangeFilterFunction logRequest() {
-        return (clientRequest, next) -> {
-            log.info("Request: {} {}", clientRequest.method(), clientRequest.url());
-            clientRequest.headers()
-                .forEach((name, values) -> values.forEach(value -> log.info("{}={}", name, value)));
-            return next.exchange(clientRequest);
-        };
+        return ExchangeFilterFunction.ofRequestProcessor(
+            clientRequest -> {
+                var requestMono = Mono.just(clientRequest);
+                log.info("Request: {} {}", clientRequest.method(), clientRequest.url());
+                clientRequest.headers()
+                    .forEach((name, values) -> values.forEach(value -> log.info("{}={}", name, value)));
+
+                return requestMono;
+            }
+        );
+
+
+//        return (clientRequest, next) -> {
+//            log.info("Request: {} {}", clientRequest.method(), clientRequest.url());
+//            clientRequest.headers()
+//                .forEach((name, values) -> values.forEach(value -> log.info("{}={}", name, value)));
+//            return next.exchange(clientRequest);
+//        };
     }
 
 
@@ -99,12 +85,12 @@ public class TestConfig {
 //        return request;
 //    }
 
-    @Bean
-    public WebTestClientBuilderCustomizer clientBuilderCustomizer() {
-        return builder -> builder
-            .filter(logRequest())
-            .filter(logResponse());
-    }
+//    @Bean
+//    public WebTestClientBuilderCustomizer clientBuilderCustomizer() {
+//        return builder -> builder
+//            .filter(logRequest())
+//            .filter(logResponse());
+//    }
 
 
 }

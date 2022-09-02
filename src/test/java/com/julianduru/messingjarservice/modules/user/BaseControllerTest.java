@@ -40,7 +40,6 @@ public class BaseControllerTest {
 
 
     @Autowired
-//    @Qualifier("loggingWebClient")
     protected WebTestClient webTestClient;
 
 
@@ -60,43 +59,6 @@ public class BaseControllerTest {
 
         mongoDBContainer.waitingFor(Wait.forListeningPort());
     }
-
-
-//    @BeforeEach
-//    public void beforeEach() {
-//        this.webTestClient = webTestClient.mutate()
-//            .filter(logRequest())
-//            .filter(logResponse())
-//            .build();
-//    }
-
-
-
-    protected ExchangeFilterFunction logRequest() {
-        return (clientRequest, next) -> {
-            log.info("Request: {} {}", clientRequest.method(), clientRequest.url());
-            log.info("Headers...");
-            clientRequest.headers()
-                .forEach((name, values) -> values.forEach(value -> log.info("{}={}", name, value)));
-
-            log.info("Body: {}", clientRequest.body());
-
-            return next.exchange(clientRequest);
-        };
-    }
-
-
-    protected ExchangeFilterFunction logResponse() {
-        return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
-            clientResponse
-                .bodyToMono(new ParameterizedTypeReference<String>() {})
-                .doOnNext((body) -> log.info("Response: {}", body));
-
-            return Mono.just(clientResponse);
-        });
-    }
-
-
 
 
 }
