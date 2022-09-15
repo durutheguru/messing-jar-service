@@ -22,6 +22,7 @@
 
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
@@ -53,13 +54,19 @@
 		<dependency>
 			<groupId>com.julianduru</groupId>
 			<artifactId>util-lib</artifactId>
-			<version>sample-SNAPSHOT</version>
+			<version>1.0.0-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-data-jpa</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.julianduru</groupId>
+			<artifactId>oauth-service-lib</artifactId>
+			<version>0.7.2-83-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

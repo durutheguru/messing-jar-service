@@ -1,39 +1,8 @@
 
-
 version: '3.8'
 
 
 services:
-
-  eureka-discovery-server:
-    image: durutheguru/eureka-discovery-server:latest
-    restart: always
-    ports:
-      - "8761:8761"
-    stdin_open: true
-    tty: true
-    networks:
-      - docker-net
-
-  mongodb:
-    image: mongo
-    restart: always
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/db --quiet 1
-      interval: 10s
-      timeout: 300s
-      retries: 20
-    environment:
-      MONGO_INITDB_DATABASE: messing-jar-db
-#      MONGO_INITDB_ROOT_USERNAME: root
-#      MONGO_INITDB_ROOT_PASSWORD: pwd
-    ports:
-      - "27017:27017"
-    volumes:
-      - db_mongo:/var/lib/mongodb
-    networks:
-      - docker-net
-
   mysqldb:
     image: mysql:8.0
     restart: always
@@ -48,7 +17,7 @@ services:
     ports:
       - "33080:3306"
     volumes:
-      - db_mysql:/var/lib/mysql
+      - db:/var/lib/mysql
     networks:
       - docker-net
 
@@ -56,12 +25,10 @@ services:
     depends_on:
       mysqldb:
         condition: service_healthy
-    image: durutheguru/oauth-service:latest
+    image: durutheguru/oauth-service:0.2.0-main.135
     restart: always
     ports:
       - "10101:10101"
-    volumes:
-      - app:/var/lib/app_dump
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/oauth_service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
       SPRING_DATASOURCE_USERNAME: root
@@ -73,9 +40,7 @@ services:
 
 
 volumes:
-  db_mongo:
-  db_mysql:
-  app:
+  db:
 
 
 networks:

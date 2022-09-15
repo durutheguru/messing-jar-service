@@ -24,16 +24,9 @@ public class UserControllerTest extends BaseControllerTest {
     private UserRepository userRepository;
 
 
+
     @Test
     public void testSavingNewUser() throws Exception {
-//        mockMvc.perform(
-//            post(UserController.PATH)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(JSONUtil.asJsonString(userDtoProvider.provide()))
-//        ).andDo(print())
-//            .andExpect(status().is2xxSuccessful());
-
-
         var userDto = userDtoProvider.provide();
 
         webTestClient
