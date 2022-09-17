@@ -66,7 +66,6 @@ public class BaseControllerTest {
         )
         .withExposedService("eureka-discovery-server_1", 8761)
         .withEnv("DOCKER_DEFAULT_PLATFORM", "linux/amd64")
-        .withLocalCompose(true)
         .withTailChildContainers(true);
 
 
