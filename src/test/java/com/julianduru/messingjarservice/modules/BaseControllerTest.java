@@ -3,10 +3,7 @@ package com.julianduru.messingjarservice.modules;
 import com.github.javafaker.Faker;
 import com.julianduru.messingjarservice.config.TestConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -63,8 +60,7 @@ public class BaseControllerTest {
         .withExposedService("eureka-discovery-server_1", 8761)
         .withEnv("DOCKER_DEFAULT_PLATFORM", "linux/amd64")
         .withLocalCompose(true)
-        .withLogConsumer("oauth-service_1", new Slf4jLogConsumer(log).withPrefix("OAUTH_TC>> "))
-        .withLogConsumer("eureka-discovery-server_1", new Slf4jLogConsumer(log).withPrefix("EUREKA_TC>> "));
+        .withTailChildContainers(true);
 
 
     @DynamicPropertySource
