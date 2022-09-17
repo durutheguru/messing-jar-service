@@ -20,6 +20,16 @@
 	<properties>
 		<java.version>17</java.version>
 		<testcontainers.version>1.17.3</testcontainers.version>
+		<sonar.projectKey.config>durutheguru_messing-jar-service</sonar.projectKey.config>
+		<sonar.organization.config>durutheguru</sonar.organization.config>
+		<sonar.host.url.config>https://sonarcloud.io</sonar.host.url.config>
+		<sonar.qualitygate.wait.config>false</sonar.qualitygate.wait.config>
+		<code.coverage.inclusions>
+			src/main/java/**
+		</code.coverage.inclusions>
+		<code.coverage.exclusions>
+			src/test/java/**
+		</code.coverage.exclusions>
 	</properties>
 
 
@@ -130,3 +140,4 @@
 	</build>
 
 </project>
+

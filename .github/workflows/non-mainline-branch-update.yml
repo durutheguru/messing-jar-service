@@ -35,4 +35,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: mvn -B verify -s settings.xml -f pom.xml
+      run: mvn -B verify -s settings.xml -Psonar -Dsonar.login=${{ secrets.SONAR_TOKEN }} org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -f pom.xml
+
