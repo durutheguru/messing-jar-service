@@ -17,10 +17,12 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.File;
+import java.time.Duration;
 
 /**
  * created by julian on 28/08/2022
@@ -56,7 +58,12 @@ public class BaseControllerTest {
         new File("src/test/resources/docker-compose.yml")
     )
         .withExposedService("mongodb_1", 27017)
-        .withExposedService("oauth-service_1", 10101)
+        .withExposedService(
+            "oauth-service_1", 10101,
+            Wait.forHttp("/")
+                .forStatusCodeMatching(code -> code >= 200 && code <= 500)
+                .withStartupTimeout(Duration.ofSeconds(300))
+        )
         .withExposedService("eureka-discovery-server_1", 8761)
         .withEnv("DOCKER_DEFAULT_PLATFORM", "linux/amd64")
         .withLocalCompose(true)

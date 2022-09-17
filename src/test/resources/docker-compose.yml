@@ -19,7 +19,8 @@ services:
     image: mongo
     restart: always
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/db --quiet 1
+#      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/db --quiet 1
+      test: ["CMD","mongo", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 300s
       retries: 20
