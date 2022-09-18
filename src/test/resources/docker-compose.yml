@@ -6,7 +6,8 @@ version: '3.8'
 services:
 
   eureka-discovery-server:
-    image: durutheguru/eureka-discovery-server:0.2.0-main.25
+    image: durutheguru/eureka-discovery-server:latest
+    pull_policy: always
     restart: always
     ports:
       - "8761:8761"
@@ -57,7 +58,8 @@ services:
     depends_on:
       mysqldb:
         condition: service_healthy
-    image: durutheguru/oauth-service:0.2.0-main.164
+    image: durutheguru/oauth-service:latest
+    pull_policy: always
     restart: always
     ports:
       - "10101:10101"

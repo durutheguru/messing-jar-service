@@ -44,7 +44,6 @@ public class BaseIntegrationTest {
                 .withStartupTimeout(Duration.ofSeconds(300))
         )
         .withExposedService("eureka-discovery-server_1", 8761)
-        .withEnv("DOCKER_DEFAULT_PLATFORM", "linux/amd64")
         .withTailChildContainers(true);
 
 
