@@ -1,0 +1,87 @@
+
+
+version: '3.8'
+
+
+services:
+
+  eureka-discovery-server:
+    image: durutheguru/eureka-discovery-server:latest
+    pull_policy: always
+    restart: always
+    ports:
+      - "8761:8761"
+    stdin_open: true
+    tty: true
+    networks:
+      - docker-net
+
+  mongodb:
+    image: mongo
+    restart: always
+    healthcheck:
+#      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/db --quiet 1
+      test: ["CMD","mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 300s
+      retries: 20
+    environment:
+      MONGO_INITDB_DATABASE: messing-jar-db
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: pwd
+    ports:
+      - "27017:27017"
+    volumes:
+      - db_mongo:/var/lib/mongodb
+    networks:
+      - docker-net
+
+  mysqldb:
+    image: mysql:8.0
+    restart: always
+    healthcheck:
+      test: "mysql $$MYSQL_DATABASE -uroot -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1;'"
+      interval: 10s
+      timeout: 300s
+      retries: 20
+    environment:
+      - MYSQL_DATABASE=oauth_service
+      - MYSQL_ROOT_PASSWORD=1234567890
+    ports:
+      - "33080:3306"
+    volumes:
+      - db_mysql:/var/lib/mysql
+    networks:
+      - docker-net
+
+  oauth-service:
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    image: durutheguru/oauth-service:latest
+    pull_policy: always
+    restart: always
+    ports:
+      - "10101:10101"
+    volumes:
+      - app:/var/lib/app_dump
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/oauth_service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234567890
+    stdin_open: true
+    tty: true
+    networks:
+      - docker-net
+
+
+volumes:
+  db_mongo:
+  db_mysql:
+  app:
+
+
+networks:
+  docker-net:
+
+
