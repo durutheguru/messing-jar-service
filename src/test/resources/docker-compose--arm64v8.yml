@@ -6,8 +6,7 @@ version: '3.8'
 services:
 
   eureka-discovery-server:
-    image: durutheguru/eureka-discovery-server:latest
-    pull_policy: always
+    image: durutheguru/eureka-discovery-server:arm64v8-latest
     restart: always
     ports:
       - "8761:8761"
@@ -20,15 +19,15 @@ services:
     image: mongo
     restart: always
     healthcheck:
-#      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/db --quiet 1
+      #      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/db --quiet 1
       test: ["CMD","mongo", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 300s
       retries: 20
     environment:
       MONGO_INITDB_DATABASE: messing-jar-db
-#      MONGO_INITDB_ROOT_USERNAME: root
-#      MONGO_INITDB_ROOT_PASSWORD: pwd
+    #      MONGO_INITDB_ROOT_USERNAME: root
+    #      MONGO_INITDB_ROOT_PASSWORD: pwd
     ports:
       - "27017:27017"
     volumes:
@@ -58,8 +57,7 @@ services:
     depends_on:
       mysqldb:
         condition: service_healthy
-    image: durutheguru/oauth-service:latest
-    pull_policy: always
+    image: durutheguru/oauth-service:arm64v8-latest
     restart: always
     ports:
       - "10101:10101"
