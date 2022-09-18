@@ -12,7 +12,7 @@
 
 
 	<artifactId>messing-jar-service</artifactId>
-	<version>0.2.0-main.25-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>messing-jar-service</name>
 	<description>Messing Jar Service</description>
 
