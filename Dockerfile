@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY /target/messing-jar-service.jar /app/messing-jar-service.jar
 
-EXPOSE 10101
+EXPOSE 9190
 
 ENTRYPOINT ["java", "-jar", "messing-jar-service.jar"]
 
