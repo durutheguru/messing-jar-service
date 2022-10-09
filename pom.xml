@@ -54,6 +54,7 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
@@ -66,7 +67,7 @@
 		<dependency>
 			<groupId>com.julianduru</groupId>
 			<artifactId>util-lib</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.1.0-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
@@ -78,7 +79,7 @@
 		<dependency>
 			<groupId>com.julianduru</groupId>
 			<artifactId>oauth-service-lib</artifactId>
-			<version>0.7.2-83-SNAPSHOT</version>
+			<version>sample-build</version>
 		</dependency>
 
 		<dependency>
