@@ -1,5 +1,6 @@
 package com.julianduru.messingjarservice.modules.user;
 
+import com.julianduru.messingjarservice.data.UserDataUpdateProvider;
 import com.julianduru.messingjarservice.data.UserDtoProvider;
 import com.julianduru.messingjarservice.modules.BaseControllerTest;
 import com.julianduru.messingjarservice.repositories.UserRepository;
@@ -25,6 +26,10 @@ public class UserControllerTest extends BaseControllerTest {
     private UserRepository userRepository;
 
 
+    @Autowired
+    private UserDataUpdateProvider userDataUpdateProvider;
+
+
 
     @Test
     public void testSavingNewUser() throws Exception {
@@ -47,6 +52,24 @@ public class UserControllerTest extends BaseControllerTest {
                 return true;
             })
             .verifyComplete();
+    }
+
+
+    @Test
+    public void testUpdatingUserSettings() throws Exception {
+        var userUpdate = userDataUpdateProvider.provide();
+
+        webTestClient
+            .post()
+            .uri(UserController.PATH)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(JSONUtil.asJsonString(userUpdate))
+            .exchange()
+            .expectStatus().is2xxSuccessful()
+            .expectBody()
+            .consumeWith(System.out::println);
+
+
     }
 
 
