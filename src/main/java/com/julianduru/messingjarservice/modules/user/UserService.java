@@ -14,7 +14,7 @@ public interface UserService {
     Mono<User> saveUser(UserDto userDto);
 
 
-    Mono<Void> updateUser(String username, UserUpdateDto userUpdateDto);
+    void updateUser(String username, UserUpdateDto userUpdateDto);
 
 
 }

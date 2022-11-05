@@ -35,10 +35,10 @@ public class UserController {
 
 
     @PatchMapping
-    public Mono<Void> updateUser(
+    public void updateUser(
         @Valid @RequestBody UserUpdateDto userUpdateDto, @AuthenticationPrincipal Principal principal
     ) {
-        return userService.updateUser(principal.getName(), userUpdateDto);
+        userService.updateUser(principal.getName(), userUpdateDto);
     }
 
 

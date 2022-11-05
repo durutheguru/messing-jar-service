@@ -42,12 +42,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Mono<Void> updateUser(String username, UserUpdateDto userUpdateDto) {
+    public void updateUser(String username, UserUpdateDto userUpdateDto) {
         settingsRepository
             .findByUsername(username)
-            .onErrorReturn(new Settings())
+            .switchIfEmpty(Mono.just(new Settings()))
             .flatMap(
                 s -> {
+                    s.setUsername(username);
                     s.setEnableEmails(userUpdateDto.isEnableEmails());
                     return settingsRepository.save(s);
                 }
@@ -63,8 +64,6 @@ public class UserServiceImpl implements UserService {
                 userUpdateDto.getProfilePhotoRef()
             )
         );
-
-        return Mono.empty();
     }
 
 
