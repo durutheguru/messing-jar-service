@@ -76,6 +76,12 @@ public class UserControllerTest extends BaseControllerTest {
     }
 
 
+    /**
+     * TODO:
+     * - debug docker-compose
+     * - test with embedded mongo
+     * @throws Exception
+     */
     @Test
     public void testUpdatingUserSettings() throws Exception {
         // save user on oauth-service

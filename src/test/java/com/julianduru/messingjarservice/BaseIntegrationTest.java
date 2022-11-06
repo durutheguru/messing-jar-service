@@ -5,6 +5,7 @@ import com.julianduru.messingjarservice.config.OAuthServiceDatabaseConfig;
 import com.julianduru.messingjarservice.config.TestConfig;
 import com.julianduru.messingjarservice.docker.ProfiledDockerComposeContainer;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -31,8 +32,7 @@ public class BaseIntegrationTest {
     protected Faker faker = new Faker();
 
 
-    private static boolean testContainersEnabled = "true"
-        .equalsIgnoreCase(System.getenv("testcontainers.enabled"));
+    private static boolean testContainersEnabled = false;
 
 
     @Container

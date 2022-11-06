@@ -5,15 +5,15 @@ version: '3.8'
 
 services:
 
-  eureka-discovery-server:
-    image: durutheguru/eureka-discovery-server:arm64v8-latest
-    restart: always
-    ports:
-      - "8761:8761"
-    stdin_open: true
-    tty: true
-    networks:
-      - docker-net
+#  eureka-discovery-server:
+#    image: durutheguru/eureka-discovery-server:arm64v8-latest
+#    restart: always
+#    ports:
+#      - "8761:8761"
+#    stdin_open: true
+#    tty: true
+#    networks:
+#      - docker-net
 
   mongodb:
     image: mongo
@@ -88,7 +88,7 @@ services:
       mysqldb:
         condition: service_healthy
     image: durutheguru/oauth-service:arm64v8-latest
-    restart: always
+    restart: on-failure
     ports:
       - "10101:10101"
     volumes:

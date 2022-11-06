@@ -26,7 +26,7 @@ public class ProfiledDockerComposeContainer<SELF extends DockerComposeContainer<
                 .forStatusCodeMatching(code -> code >= 200 && code <= 500)
                 .withStartupTimeout(Duration.ofSeconds(400))
         );
-        withExposedService("eureka-discovery-server_1", 8761);
+//        withExposedService("eureka-discovery-server_1", 8761);
         withExposedService("kafka_1", 29092);
         withTailChildContainers(true);
     }
