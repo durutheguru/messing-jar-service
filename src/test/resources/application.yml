@@ -1,0 +1,78 @@
+code:
+    config:
+        crypto:
+            default-algorithm: AES/ECB/PKCS5Padding
+            default-key: SecretKey180389189381y511789314
+        kafka:
+            oauth-service:
+                topic-name: oauth-user-data-update-log
+        oauth2:
+            authorization-server:
+                base-url: http://localhost:10101
+                gql-base-url: ${code.config.oauth2.authorization-server.base-url}/graphql
+            client:
+                bootstrap: true
+                client-id: messing-jar-service
+                client-name: Messing Jar Service
+                client-secret: messing-jar-service-secret
+                clientSettings[settings:
+                    client:
+                        proof]: true
+                enabled: true
+                redirectUris:
+                - http://127.0.0.1:9190
+                tokenSettings[settings:
+                    token:
+                        access-token-time-to-live]: 600
+                        validity]: 1000
+            resource-server:
+                allowedScopes:
+                - openid
+                bootstrap: true
+                enabled: true
+                jwk-set-uri: ${code.config.oauth2.authorization-server.base-url}/oauth2/jwks
+                serverId: messing-jar-service
+                userAuthoritiesOnSignUp:
+                - USER
+        web:
+            cors:
+                allowed-origins: http://127.0.0.1:5173
+spring:
+    data:
+        mongodb:
+            uri: mongodb://localhost:27017/messing-jar-db?replicaSet=rs0
+    kafka:
+        bootstrap-servers: localhost:9092
+    security:
+        oauth2:
+            client:
+                provider:
+                    messing-jar-service:
+                        authorization-uri: ${code.config.oauth2.authorization-server.base-url}/oauth2/authorize
+                        jwk-set-uri: ${code.config.oauth2.authorization-server.base-url}/oauth2/jwks
+                        token-uri: ${code.config.oauth2.authorization-server.base-url}/oauth2/token
+                    oauth_service:
+                        authorization-uri: ${code.config.oauth2.authorization-server.base-url}/oauth2/authorize
+                        jwk-set-uri: ${code.config.oauth2.authorization-server.base-url}/oauth2/jwks
+                        token-uri: ${code.config.oauth2.authorization-server.base-url}/oauth2/token
+                registration:
+                    messing-jar-service:
+                        authorization-grant-type: client_credentials
+                        client-id: messing-jar-service
+                        client-secret: messing-jar-service-secret
+                        scope: openid
+                    oauth_service:
+                        authorization-grant-type: client_credentials
+                        client-id: oauth-service-bootstrap-client-id
+                        client-secret: oauth-service-bootstrap-client-secret
+                        scope: openid
+test:
+    code:
+        config:
+            oauth-service:
+                datasource:
+                    password: ''
+                    url: jdbc:mysql://localhost:3306/oauth_service?createDatabaseIfNotExist=true&serverTimezone=UTC
+                    username: root
+testcontainers:
+    enabled: true

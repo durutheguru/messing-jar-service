@@ -165,5 +165,88 @@ public class UserControllerTest extends BaseControllerTest {
     }
 
 
+    @Test
+    public void testUpdatingUserSettingsWithBrokerDown() throws Exception {
+        // save user on oauth-service
+        var response = oauthServerGraphQLClient.post(
+            GraphQLRequest.builder()
+                .query(
+                    """
+                        mutation SaveUser(
+                          $username: String!
+                          $password: String!
+                          $firstName: String!
+                          $lastName: String!
+                          $email: String!
+                        ) {
+                            saveUser(userDto: {
+                                username: $username,
+                                password: $password,
+                                firstName: $firstName,
+                                lastName: $lastName, 
+                                email: $email 
+                            }) {
+                                username
+                                firstName
+                                lastName
+                            }
+                        }
+                        """
+                )
+                .variables(
+                    Map.of(
+                        "username", "messing-jar-service",
+                        "password", faker.code().isbn10(),
+                        "firstName", faker.name().firstName(),
+                        "lastName", faker.name().lastName(),
+                        "email", faker.internet().emailAddress()
+                    )
+                )
+                .build()
+        ).blockOptional();
+
+        var gqlResponse = response.get();
+        assertThat(gqlResponse.getErrors().isEmpty()).isTrue();
+
+
+        var userUpdate = userDataUpdateProvider.provide();
+
+
+        // post user data update to messing-jar-service
+        webTestClient
+            .patch()
+            .uri(UserController.PATH)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(JSONUtil.asJsonString(userUpdate))
+            .exchange()
+            .expectStatus().is2xxSuccessful()
+            .expectBody()
+            .consumeWith(System.out::println);
+
+
+        StepVerifier.create(
+            settingsRepository
+                .findByUsername("messing-jar-service")
+        ).expectNextMatches(
+            s -> {
+                assertThat(s.isEnableEmails()).isTrue();
+                return true;
+            }
+        ).verifyComplete();
+
+
+        // ensure updates are reflected on oauth-service db
+        var countUpdatedRows = JdbcTestUtils.countRowsInTableWhere(
+            oauthServiceJdbcTemplate,
+            "user_data",
+            String.format(
+                "first_name = '%s' AND last_name = '%s' AND email = '%s'",
+                userUpdate.getFirstName(), userUpdate.getLastName(), userUpdate.getEmail()
+            )
+        );
+        assertThat(countUpdatedRows).isEqualTo(0);
+    }
+
+
 }
 

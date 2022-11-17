@@ -1,6 +1,7 @@
 package com.julianduru.messingjarservice.modules.user;
 
 import com.julianduru.messingjarservice.dto.UserDto;
+import com.julianduru.messingjarservice.entities.Settings;
 import com.julianduru.messingjarservice.entities.User;
 import com.julianduru.messingjarservice.modules.user.dto.UserUpdateDto;
 import reactor.core.publisher.Mono;
@@ -14,7 +15,7 @@ public interface UserService {
     Mono<User> saveUser(UserDto userDto);
 
 
-    void updateUser(String username, UserUpdateDto userUpdateDto);
+    Mono<Void> updateUser(String username, UserUpdateDto userUpdateDto);
 
 
 }

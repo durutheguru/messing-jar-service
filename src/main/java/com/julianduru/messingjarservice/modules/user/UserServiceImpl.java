@@ -7,13 +7,11 @@ import com.julianduru.messingjarservice.entities.User;
 import com.julianduru.messingjarservice.modules.user.dto.UserUpdateDto;
 import com.julianduru.messingjarservice.repositories.SettingsRepository;
 import com.julianduru.messingjarservice.repositories.UserRepository;
-import com.julianduru.messingjarservice.util.AuthUtil;
 import com.julianduru.oauthservicelib.modules.user.UserDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 /**
@@ -21,6 +19,7 @@ import reactor.core.publisher.Mono;
  */
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -42,8 +41,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void updateUser(String username, UserUpdateDto userUpdateDto) {
-        settingsRepository
+    public Mono<Void> updateUser(String username, UserUpdateDto userUpdateDto) {
+        return settingsRepository
             .findByUsername(username)
             .switchIfEmpty(Mono.just(new Settings()))
             .flatMap(
@@ -53,17 +52,18 @@ public class UserServiceImpl implements UserService {
                     return settingsRepository.save(s);
                 }
             )
-            .subscribe();
-
-        userDataService.processOAuthUserDataUpdate(
-            new UserDataUpdate(
-                username,
-                userUpdateDto.getFirstName(),
-                userUpdateDto.getLastName(),
-                userUpdateDto.getEmail(),
-                userUpdateDto.getProfilePhotoRef()
+            .map(
+                settings -> userDataService.processOAuthUserDataUpdate(
+                    new UserDataUpdate(
+                        username,
+                        userUpdateDto.getFirstName(),
+                        userUpdateDto.getLastName(),
+                        userUpdateDto.getEmail(),
+                        userUpdateDto.getProfilePhotoRef()
+                    )
+                )
             )
-        );
+            .then();
     }
 
 
