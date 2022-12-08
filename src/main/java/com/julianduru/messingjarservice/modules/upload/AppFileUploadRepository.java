@@ -3,6 +3,8 @@ package com.julianduru.messingjarservice.modules.upload;
 import com.julianduru.fileuploader.api.FileUpload;
 import com.julianduru.fileuploader.repositories.FileUploadRepository;
 import com.julianduru.messingjarservice.repositories.MessingJarFileUploadRepository;
+import com.julianduru.messingjarservice.util.ReactiveBlocker;
+import com.julianduru.messingjarservice.util.ReactiveListBlocker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -29,9 +31,11 @@ public class AppFileUploadRepository implements FileUploadRepository {
 
     @Override
     public FileUpload save(FileUpload upload) {
-        var savedUpload = messingJarFileUploadRepository.save(
-            com.julianduru.messingjarservice.entities.FileUpload.from(upload)
-        ).block();
+        var savedUpload = new ReactiveBlocker<>(
+            messingJarFileUploadRepository.save(
+                com.julianduru.messingjarservice.entities.FileUpload.from(upload)
+            )
+        ).getValue();
 
         if (savedUpload != null) {
             return savedUpload.toApi();
@@ -55,9 +59,12 @@ public class AppFileUploadRepository implements FileUploadRepository {
 
     @Override
     public Optional<FileUpload> findByReference(String reference) {
-        return messingJarFileUploadRepository.findByReference(reference)
-            .map(com.julianduru.messingjarservice.entities.FileUpload::toApi)
-            .blockOptional();
+        return Optional.ofNullable(
+            new ReactiveBlocker<>(
+                messingJarFileUploadRepository.findByReference(reference)
+                    .map(com.julianduru.messingjarservice.entities.FileUpload::toApi)
+            ).getValue()
+        );
     }
 
 
@@ -69,10 +76,10 @@ public class AppFileUploadRepository implements FileUploadRepository {
 
     @Override
     public List<FileUpload> findByReferenceIn(Collection<String> references) {
-        return messingJarFileUploadRepository
+        return new ReactiveListBlocker<>(messingJarFileUploadRepository
             .findByReferenceIn(references)
             .map(com.julianduru.messingjarservice.entities.FileUpload::toApi)
-            .collectList().block();
+        ).getValue();
     }
 
 

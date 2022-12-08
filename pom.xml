@@ -67,7 +67,7 @@
 		<dependency>
 			<groupId>com.julianduru</groupId>
 			<artifactId>file-uploader</artifactId>
-			<version>1.1.3-SNAPSHOT</version>
+			<version>1.1.5-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
@@ -90,8 +90,20 @@
 
 		<dependency>
 			<groupId>com.julianduru</groupId>
+			<artifactId>kafka-integration-lib</artifactId>
+			<version>0.0.2-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.julianduru</groupId>
 			<artifactId>oauth-service-lib</artifactId>
 			<version>sample-build</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.julianduru</groupId>
+					<artifactId>kafka-integration-lib</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>

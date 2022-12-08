@@ -1,7 +1,6 @@
 package com.julianduru.messingjarservice.data;
 
-import com.julianduru.data.messaging.dto.UserDataUpdate;
-import com.julianduru.messingjarservice.modules.user.dto.UserUpdateDto;
+import com.julianduru.messingjarservice.modules.user.dto.UserDataDto;
 import com.julianduru.util.test.DataProvider;
 import org.springframework.stereotype.Component;
 
@@ -9,12 +8,12 @@ import org.springframework.stereotype.Component;
  * created by julian on 01/11/2022
  */
 @Component
-public class UserDataUpdateProvider implements DataProvider<UserUpdateDto> {
+public class UserDataUpdateProvider implements DataProvider<UserDataDto> {
 
 
     @Override
-    public UserUpdateDto provide() {
-        var update = new UserUpdateDto();
+    public UserDataDto provide() {
+        var update = new UserDataDto();
 
         update.setEmail(faker.internet().emailAddress());
         update.setFirstName(faker.name().firstName());

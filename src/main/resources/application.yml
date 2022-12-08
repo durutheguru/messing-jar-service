@@ -1,11 +1,17 @@
+
+
 code:
     config:
         crypto:
             default-algorithm: AES/ECB/PKCS5Padding
             default-key: SecretKey180389189381y511789314
+
         kafka:
             oauth-service:
                 topic-name: oauth-user-data-update-log
+            user-push-notification:
+                topic-name: user-push-notification
+
         oauth2:
             authorization-server:
                 base-url: http://localhost:10101
@@ -18,11 +24,11 @@ code:
                 clientSettings[settings:
                     client:
                         allowed:
-                            resources]: email-service,messing-jar-service
+                            resources]: email-service,messing-jar-service,push-notification-server
                         proof]: true
                 enabled: true
                 redirectUris:
-                - http://127.0.0.1:5173/oauth-service/redirect
+                    - http://127.0.0.1:5173/oauth-service/redirect
                 tokenSettings[settings:
                     token:
                         access-token-time-to-live]: 600
@@ -39,6 +45,25 @@ code:
         web:
             cors:
                 allowed-origins: http://127.0.0.1:5173
+
+
+file:
+    uploader:
+        aws:
+            access-key-id: ENC(wwoXSnldqEDEQYtNPonlxNwM5l9j4i5QhGbhPV7u4Sg=)
+            secret-access-key: ENC(UiWMLwvXudm5Idp+dktS3Qm8s+wyb8jFZ4NzNWPegPOb1DNv16xZB4/Ez0UAkRpy30hBAWbjAnI=)
+            existing-test-bucket-name: test-bucket-0x091619269449528
+
+        cloudinary:
+            cloud-name: ddexhki0
+            api-key: 754477432526662
+            api-secret: K6Fb-hMUziVDaNHadaXpAgxMwds
+
+        container-name: ${file.uploader.aws.existing-test-bucket-name}
+        default-provider: CLOUDINARY
+        file-key-prefix: uploads/
+
+
 logging:
     level:
         reactor:
@@ -46,8 +71,11 @@ logging:
                 http:
                     client:
                         HttpClient: DEBUG
+
 server:
     port: ${PORT:9190}
+
+
 spring:
     data:
         mongodb:
@@ -55,7 +83,7 @@ spring:
             host: ${SPRING_MONGO_HOST:localhost}
             port: ${SPRING_MONGO_PORT:27017}
     kafka:
-        bootstrap-servers: localhost:9092
+        bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
     security:
         oauth2:
             client:
@@ -70,3 +98,10 @@ spring:
                         client-id: oauth-service-bootstrap-client-id
                         client-secret: oauth-service-bootstrap-client-secret
                         scope: openid
+
+
+jasypt.encryptor.password: socialotto.africa
+jasypt.encryptor.algorithm: PBEWithMD5AndDES
+jasypt.encryptor.iv-generator-classname: org.jasypt.iv.NoIvGenerator
+
+

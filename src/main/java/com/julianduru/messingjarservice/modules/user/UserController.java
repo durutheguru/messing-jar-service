@@ -2,8 +2,7 @@ package com.julianduru.messingjarservice.modules.user;
 
 import com.julianduru.messingjarservice.ServiceConstants;
 import com.julianduru.messingjarservice.dto.UserDto;
-import com.julianduru.messingjarservice.entities.Settings;
-import com.julianduru.messingjarservice.modules.user.dto.UserUpdateDto;
+import com.julianduru.messingjarservice.modules.user.dto.UserDataDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,9 +36,15 @@ public class UserController {
 
     @PatchMapping
     public Mono<Void> updateUser(
-        @Valid @RequestBody UserUpdateDto userUpdateDto, @AuthenticationPrincipal Principal principal
+        @Valid @RequestBody UserDataDto userDataDto, @AuthenticationPrincipal Principal principal
     ) {
-        return userService.updateUser(principal.getName(), userUpdateDto);
+        return userService.updateUser(principal.getName(), userDataDto);
+    }
+
+
+    @GetMapping
+    public Mono<UserDataDto> fetchUserDetails(@AuthenticationPrincipal Principal principal) {
+        return userService.fetchUserDetails(principal.getName());
     }
 
 

@@ -1,6 +1,7 @@
 package com.julianduru.messingjarservice.repositories;
 
 import com.julianduru.messingjarservice.entities.FileUpload;
+import org.awaitility.Awaitility;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -8,6 +9,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * created by julian on 20/11/2022
@@ -20,7 +22,18 @@ public interface MessingJarFileUploadRepository extends BaseEntityRepository<Fil
 
 
     default boolean existsByReference(String reference) {
-        return countByReference(reference).block() > 0;
+        var value = new boolean[1];
+        var itemSet = new AtomicBoolean(false);
+        var mono = countByReference(reference).map(r -> r  > 0);
+
+        mono.subscribe(b -> {
+            value[0] = b;
+            itemSet.set(true);
+        });
+
+        Awaitility.await().untilTrue(itemSet);
+
+        return value[0];
     }
 
 
