@@ -1,0 +1,107 @@
+
+
+code:
+    config:
+        crypto:
+            default-algorithm: AES/ECB/PKCS5Padding
+            default-key: SecretKey180389189381y511789314
+
+        kafka:
+            oauth-service:
+                topic-name: oauth-user-data-update-log
+            user-push-notification:
+                topic-name: user-push-notification
+
+        oauth2:
+            authorization-server:
+                base-url: http://localhost:10101
+                gql-base-url: ${code.config.oauth2.authorization-server.base-url}/graphql
+            client:
+                bootstrap: true
+                clientId: messing-jar-service
+                clientName: Messing Jar Service
+                clientSecret: messing-jar-service-secret
+                clientSettings[settings:
+                    client:
+                        allowed:
+                            resources]: email-service,messing-jar-service,push-notification-server
+                        proof]: true
+                enabled: true
+                redirectUris:
+                    - http://127.0.0.1:5173/oauth-service/redirect
+                tokenSettings[settings:
+                    token:
+                        access-token-time-to-live]: 600
+                        validity]: 1000
+            resource-server:
+                allowedScopes:
+                - OPENID
+                bootstrap: true
+                enabled: true
+                jwk-set-uri: ${code.config.oauth2.authorization-server.base-url}/oauth2/jwks
+                serverId: messing-jar-service
+                userAuthoritiesOnSignUp:
+                - USER
+        web:
+            cors:
+                allowed-origins: http://127.0.0.1:5173
+
+
+file:
+    uploader:
+        aws:
+            access-key-id: ENC(wwoXSnldqEDEQYtNPonlxNwM5l9j4i5QhGbhPV7u4Sg=)
+            secret-access-key: ENC(UiWMLwvXudm5Idp+dktS3Qm8s+wyb8jFZ4NzNWPegPOb1DNv16xZB4/Ez0UAkRpy30hBAWbjAnI=)
+            existing-test-bucket-name: test-bucket-0x091619269449528
+
+        cloudinary:
+            cloud-name: ddexhki0
+            api-key: 754477432526662
+            api-secret: K6Fb-hMUziVDaNHadaXpAgxMwds
+
+        container-name: ${file.uploader.aws.existing-test-bucket-name}
+        default-provider: CLOUDINARY
+        file-key-prefix: uploads/
+
+
+logging:
+    level:
+        reactor:
+            netty:
+                http:
+                    client:
+                        HttpClient: DEBUG
+
+server:
+    port: ${PORT:9190}
+
+
+spring:
+    data:
+        mongodb:
+            database: ${SPRING_MONGO_DBNAME:messing-jar-db}
+            host: ${SPRING_MONGO_HOST:localhost}
+            port: ${SPRING_MONGO_PORT:27017}
+    kafka:
+        bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+    security:
+        oauth2:
+            client:
+                provider:
+                    oauth_service:
+                        authorization-uri: ${code.config.oauth2.authorization-server.base-url}/oauth2/authorize
+                        jwk-set-uri: ${code.config.oauth2.authorization-server.base-url}/oauth2/jwks
+                        token-uri: ${code.config.oauth2.authorization-server.base-url}/oauth2/token
+                registration:
+                    oauth_service:
+                        authorization-grant-type: client_credentials
+                        client-id: oauth-service-bootstrap-client-id
+                        client-secret: oauth-service-bootstrap-client-secret
+                        scope: openid
+
+
+jasypt.encryptor.password: socialotto.africa
+jasypt.encryptor.algorithm: PBEWithMD5AndDES
+jasypt.encryptor.iv-generator-classname: org.jasypt.iv.NoIvGenerator
+
+

@@ -9,4 +9,13 @@ public interface ServiceConstants {
     String API_BASE = "/api/v1";
 
 
+    interface NotificationType {
+
+        String PROFILE_DETAILS_UPDATE = "profile-details-update";
+
+    }
+
+
 }
+
+
