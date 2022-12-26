@@ -1,6 +1,7 @@
 package com.julianduru.messingjarservice.modules.user.components;
 
 import com.julianduru.fileuploader.repositories.FileUploadRepository;
+import com.julianduru.messingjarservice.dto.UserDto;
 import com.julianduru.messingjarservice.entities.Settings;
 import com.julianduru.messingjarservice.modules.user.dto.OAuthUserData;
 import com.julianduru.messingjarservice.modules.user.dto.UserDataDto;
@@ -19,6 +20,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserDetailsReader {
 
+    private final UserSaver userSaver;
 
     private final WebClient oauthServerWebClient;
 
@@ -30,6 +32,13 @@ public class UserDetailsReader {
 
 
     public Mono<UserDataDto> fetchUserDetails(String username) {
+        userSaver.saveUser(
+            UserDto
+                .builder()
+                .username(username)
+                .build()
+        );
+
         var userSettingsMono = settingsRepository
             .findByUsername(username)
             .switchIfEmpty(Mono.just(new Settings()));

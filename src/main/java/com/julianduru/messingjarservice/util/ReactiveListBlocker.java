@@ -35,7 +35,10 @@ public class ReactiveListBlocker<T> {
                 return value;
             })
             .doOnComplete(() -> valuesSet.set(true))
-            .subscribe();
+            .subscribe(i -> System.out.println("Item: " + i), e -> {
+                System.err.println("Error..." + e.getMessage());
+                e.printStackTrace();
+            });
 
         Awaitility.await().untilTrue(valuesSet);
 
