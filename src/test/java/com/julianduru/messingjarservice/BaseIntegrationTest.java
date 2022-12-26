@@ -32,7 +32,7 @@ public class BaseIntegrationTest {
     protected Faker faker = new Faker();
 
 
-    private static boolean testContainersEnabled = false;
+    private static boolean testContainersEnabled = true;
 
 
     @Container

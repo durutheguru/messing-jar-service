@@ -1,4 +1,4 @@
-package com.julianduru.messingjarservice.modules.fileupload.controller;
+package com.julianduru.messingjarservice.modules.upload.controller;
 
 import com.julianduru.fileuploader.Upload;
 import com.julianduru.fileuploader.UploadRequest;
@@ -28,8 +28,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/file__upload")
+@RequestMapping(FileUploadController.PATH)
 public class FileUploadController {
+
+    public static final String PATH = "/file__upload";
+
 
     private final Upload upload;
 

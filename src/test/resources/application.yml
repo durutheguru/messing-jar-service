@@ -6,6 +6,8 @@ code:
         kafka:
             oauth-service:
                 topic-name: oauth-user-data-update-log
+            user-push-notification:
+                topic-name: user-push-notification
         oauth2:
             authorization-server:
                 base-url: http://localhost:10101
