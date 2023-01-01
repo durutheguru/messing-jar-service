@@ -10,6 +10,8 @@ import org.springframework.security.oauth2.client.web.reactive.function.client.S
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 
+import java.time.Duration;
+
 /**
  * created by julian on 28/08/2022
  */
@@ -51,6 +53,7 @@ public class BaseControllerTest extends BaseIntegrationTest {
         webTestClient = webTestClient.mutate()
             .filter(oauth)
             .exchangeStrategies(exchangeStrategies)
+            .responseTimeout(Duration.ofSeconds(300))
             .build();
 
         webTestClientInitialized = true;

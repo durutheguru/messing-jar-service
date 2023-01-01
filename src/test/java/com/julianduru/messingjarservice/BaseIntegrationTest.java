@@ -1,19 +1,18 @@
 package com.julianduru.messingjarservice;
 
 import com.github.javafaker.Faker;
+import com.julianduru.messingjarservice.config.OAuthServiceDatabaseConfig;
 import com.julianduru.messingjarservice.config.TestConfig;
+import com.julianduru.messingjarservice.docker.ProfiledDockerComposeContainer;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.containers.DockerComposeContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
-import java.io.File;
-import java.time.Duration;
 
 /**
  * created by julian on 18/09/2022
@@ -23,6 +22,7 @@ import java.time.Duration;
 @SpringBootTest(
     classes = {
         TestConfig.class,
+        OAuthServiceDatabaseConfig.class,
     },
     webEnvironment =  SpringBootTest.WebEnvironment.RANDOM_PORT
 )
@@ -32,27 +32,24 @@ public class BaseIntegrationTest {
     protected Faker faker = new Faker();
 
 
+    private static boolean testContainersEnabled = false;
+
+
     @Container
-    protected static DockerComposeContainer dockerComposeContainer = new DockerComposeContainer(
-        new File("src/test/resources/docker-compose.yml")
-    )
-        .withExposedService("mongodb_1", 27017)
-        .withExposedService(
-            "oauth-service_1", 10101,
-            Wait.forHttp("/")
-                .forStatusCodeMatching(code -> code >= 200 && code <= 500)
-                .withStartupTimeout(Duration.ofSeconds(300))
-        )
-        .withExposedService("eureka-discovery-server_1", 8761)
-        .withTailChildContainers(true);
+    protected static DockerComposeContainer dockerComposeContainer = new ProfiledDockerComposeContainer(
+        testContainersEnabled
+    );
 
 
     @DynamicPropertySource
     protected static void setProperties(
         DynamicPropertyRegistry registry
     ) {
-        setMongoProperties(registry);
-        setOauthServerProperties(registry);
+        if (testContainersEnabled) {
+            setMongoProperties(registry);
+            setOauthServerProperties(registry);
+            setKafkaProperties(registry);
+        }
     }
 
 
@@ -82,4 +79,19 @@ public class BaseIntegrationTest {
     }
 
 
+    private static void setKafkaProperties(DynamicPropertyRegistry registry) {
+        var kafkaHost = dockerComposeContainer.getServiceHost("kafka_1", 29092);
+        var kafkaPort = dockerComposeContainer.getServicePort("kafka_1", 29092);
+
+        var kafkaUrl = String.format("%s:%d", kafkaHost, kafkaPort);
+
+        registry.add(
+            "spring.kafka.bootstrap-servers",
+            () -> kafkaUrl
+        );
+    }
+
+
 }
+
+

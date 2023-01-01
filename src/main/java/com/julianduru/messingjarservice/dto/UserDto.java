@@ -1,7 +1,10 @@
 package com.julianduru.messingjarservice.dto;
 
 import com.julianduru.messingjarservice.entities.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -10,6 +13,9 @@ import javax.validation.constraints.Size;
  * created by julian on 27/08/2022
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDto extends BaseDto {
 
 

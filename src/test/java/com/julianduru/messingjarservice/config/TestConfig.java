@@ -1,12 +1,17 @@
 package com.julianduru.messingjarservice.config;
 
 import com.julianduru.oauthservicelib.component.MutatingReactiveClientRegistrationRepository;
+import com.julianduru.oauthservicelib.config.WebClientOAuthConfigurer;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesRegistrationAdapter;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.testcontainers.containers.DockerComposeContainer;
 
 /**
  * created by julian on 31/08/2022
@@ -26,6 +31,31 @@ public class TestConfig {
         return new MutatingReactiveClientRegistrationRepository(
             clientRegistrations.stream().toList()
         );
+    }
+
+
+    @Bean
+    @ConditionalOnBean(DockerComposeContainer.class)
+    public WebClient oauthServerGQLWebClient(
+        DockerComposeContainer dockerComposeContainer,
+        WebClientOAuthConfigurer webClientOAuthConfigurer
+    ) {
+        String oauthServiceUrl = "";
+
+        if (dockerComposeContainer != null) {
+            oauthServiceUrl = String.format(
+                "%s:%s/graphql",
+                dockerComposeContainer.getServiceHost("oauth-service_1", 10101),
+                dockerComposeContainer.getServicePort("oauth-service_1", 10101)
+            );
+        }
+        else {
+
+        }
+        log.info("OAuth Service URL: {}", oauthServiceUrl);
+
+
+        return webClientOAuthConfigurer.configureWebClient(oauthServiceUrl);
     }
 
 
