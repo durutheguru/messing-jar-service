@@ -34,29 +34,29 @@ public class TestConfig {
     }
 
 
-    @Bean
-    @ConditionalOnBean(DockerComposeContainer.class)
-    public WebClient oauthServerGQLWebClient(
-        DockerComposeContainer dockerComposeContainer,
-        WebClientOAuthConfigurer webClientOAuthConfigurer
-    ) {
-        String oauthServiceUrl = "";
-
-        if (dockerComposeContainer != null) {
-            oauthServiceUrl = String.format(
-                "%s:%s/graphql",
-                dockerComposeContainer.getServiceHost("oauth-service_1", 10101),
-                dockerComposeContainer.getServicePort("oauth-service_1", 10101)
-            );
-        }
-        else {
-
-        }
-        log.info("OAuth Service URL: {}", oauthServiceUrl);
-
-
-        return webClientOAuthConfigurer.configureWebClient(oauthServiceUrl);
-    }
+//    @Bean
+//    @ConditionalOnBean(DockerComposeContainer.class)
+//    public WebClient oauthServerGQLWebClient(
+//        DockerComposeContainer dockerComposeContainer,
+//        WebClientOAuthConfigurer webClientOAuthConfigurer
+//    ) {
+//        String oauthServiceUrl = "";
+//
+//        if (dockerComposeContainer != null) {
+//            oauthServiceUrl = String.format(
+//                "%s:%s/graphql",
+//                dockerComposeContainer.getServiceHost("oauth-service_1", 10101),
+//                dockerComposeContainer.getServicePort("oauth-service_1", 10101)
+//            );
+//        }
+//        else {
+//
+//        }
+//        log.info("OAuth Service URL: {}", oauthServiceUrl);
+//
+//
+//        return webClientOAuthConfigurer.configureWebClient(oauthServiceUrl);
+//    }
 
 
 }

@@ -23,7 +23,7 @@ public class ProfiledDockerComposeContainer<SELF extends DockerComposeContainer<
         withExposedService(
             "oauth-service_1", 10101,
             Wait.forListeningPort()
-                .withStartupTimeout(Duration.ofSeconds(400))
+                .withStartupTimeout(Duration.ofSeconds(600))
         );
         withExposedService("kafka_1", 29092);
         withTailChildContainers(true);

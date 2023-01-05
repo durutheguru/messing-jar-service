@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import com.julianduru.messingjarservice.config.OAuthServiceDatabaseConfig;
 import com.julianduru.messingjarservice.config.TestConfig;
 import com.julianduru.messingjarservice.docker.ProfiledDockerComposeContainer;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +19,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
  * created by julian on 18/09/2022
  */
 //@Testcontainers
+@Slf4j
 @ExtendWith({SpringExtension.class})
 @SpringBootTest(
     classes = {
@@ -73,6 +75,7 @@ public class BaseIntegrationTest {
         var oauthServicePort = dockerComposeContainer.getServicePort("oauth-service_1", 10101);
 
         var oauthServiceUrl = String.format("%s:%d", oauthServiceHost, oauthServicePort);
+        log.info("Test: OAuth Service URL: {}", oauthServiceUrl);
 
         registry.add(
             "code.config.oauth2.authorization-server.base-url",
