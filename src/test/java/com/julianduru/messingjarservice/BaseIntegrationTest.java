@@ -17,7 +17,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 /**
  * created by julian on 18/09/2022
  */
-@Testcontainers
+//@Testcontainers
 @ExtendWith({SpringExtension.class})
 @SpringBootTest(
     classes = {
@@ -32,13 +32,19 @@ public class BaseIntegrationTest {
     protected Faker faker = new Faker();
 
 
-    private static boolean testContainersEnabled = false;
+    private static boolean testContainersEnabled = true;
 
 
     @Container
     protected static DockerComposeContainer dockerComposeContainer = new ProfiledDockerComposeContainer(
         testContainersEnabled
     );
+
+    static {
+        if (testContainersEnabled) {
+            dockerComposeContainer.start();
+        }
+    }
 
 
     @DynamicPropertySource

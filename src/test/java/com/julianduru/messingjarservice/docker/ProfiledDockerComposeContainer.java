@@ -22,11 +22,9 @@ public class ProfiledDockerComposeContainer<SELF extends DockerComposeContainer<
         withExposedService("mongodb_1", 27017);
         withExposedService(
             "oauth-service_1", 10101,
-            Wait.forHttp("/")
-                .forStatusCodeMatching(code -> code >= 200 && code <= 500)
+            Wait.forListeningPort()
                 .withStartupTimeout(Duration.ofSeconds(400))
         );
-//        withExposedService("eureka-discovery-server_1", 8761);
         withExposedService("kafka_1", 29092);
         withTailChildContainers(true);
     }
