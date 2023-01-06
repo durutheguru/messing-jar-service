@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.testcontainers.containers.ContainerState;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -64,6 +65,34 @@ public class BaseIntegrationTest {
     private static void setMongoProperties(DynamicPropertyRegistry registry) {
         var mongoHost = dockerComposeContainer.getServiceHost("mongodb_1", 27017);
         var mongoPort = dockerComposeContainer.getServicePort("mongodb_1", 27017);
+
+        try {
+            log.info("Executing Mongo replica set config");
+            var container = ((ContainerState) dockerComposeContainer
+                .getContainerByServiceName("mongodb_1")
+                .get());
+
+            var result = container.execInContainer(
+                "/bin/bash", "-c",
+            """
+            mongo --eval 'printjson(rs.initiate({_id:"rs0",members:[{_id:0,host:"mongodb:27017"}]}))'
+            """
+            );
+            container.execInContainer(
+                "/bin/bash", "-c",
+            """
+            until mongo --eval "printjson(rs.isMaster())" | grep ismaster | grep true > /dev/null 2>&1;do sleep 1;done
+            """
+            );
+
+            log.info(
+                "Done executing Mongo replica set config. Exit Code: {}, StdOut: {}",
+                result.getExitCode(), result.getStderr() + " ---{}--- " + result.getStdout()
+            );
+        }
+        catch (Throwable t) {
+            log.error("Error while executing ReplicaSet config. " + t.getMessage(), t);
+        }
 
         registry.add("spring.data.mongodb.host", () -> mongoHost);
         registry.add("spring.data.mongodb.port", () -> mongoPort);

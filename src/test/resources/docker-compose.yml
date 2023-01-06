@@ -20,22 +20,26 @@ services:
   mongodb:
     image: mongo
     restart: always
-    healthcheck:
-#      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/db --quiet 1
-      test: ["CMD","mongo", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 300s
-      retries: 20
     environment:
       MONGO_INITDB_DATABASE: messing-jar-db
-#      MONGO_INITDB_ROOT_USERNAME: root
-#      MONGO_INITDB_ROOT_PASSWORD: pwd
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pwd
     ports:
       - "27017:27017"
     volumes:
       - db_mongo:/var/lib/mongodb
     networks:
       - docker-net
+    healthcheck:
+#      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/db --quiet 1
+#      test: ["CMD","mongo", "--eval", "db.adminCommand('ping')"]
+      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo -u root -p pwd --quiet) -eq 1
+      interval: 10s
+      timeout: 300s
+      retries: 20
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+    command:
+      -
 
 
   mysqldb:
