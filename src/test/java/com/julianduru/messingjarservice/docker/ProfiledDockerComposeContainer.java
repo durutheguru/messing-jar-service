@@ -21,6 +21,11 @@ public class ProfiledDockerComposeContainer<SELF extends DockerComposeContainer<
         this.active = active;
         withExposedService("mongodb_1", 27017);
         withExposedService(
+            "mysqldb_1", 33080,
+            Wait.forHealthcheck()
+                .withStartupTimeout(Duration.ofSeconds(600))
+        );
+        withExposedService(
             "oauth-service_1", 10101,
             Wait.forListeningPort()
                 .withStartupTimeout(Duration.ofSeconds(600))

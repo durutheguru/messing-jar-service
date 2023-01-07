@@ -6,7 +6,6 @@ import com.julianduru.messingjarservice.config.TestConfig;
 import com.julianduru.messingjarservice.docker.ProfiledDockerComposeContainer;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -14,7 +13,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.containers.ContainerState;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 /**
  * created by julian on 18/09/2022
@@ -57,6 +55,7 @@ public class BaseIntegrationTest {
         if (testContainersEnabled) {
             setMongoProperties(registry);
             setOauthServerProperties(registry);
+            setOAuthServiceDbProperties(registry);
             setKafkaProperties(registry);
         }
     }
@@ -86,8 +85,8 @@ public class BaseIntegrationTest {
             );
 
             log.info(
-                "Done executing Mongo replica set config. Exit Code: {}, StdOut: {}",
-                result.getExitCode(), result.getStderr() + " ---{}--- " + result.getStdout()
+                "Done executing Mongo replica set config. Exit Code: {}, StdOut: {}, StdErr: {}",
+                result.getExitCode(), result.getStderr(), result.getStdout()
             );
         }
         catch (Throwable t) {
@@ -103,7 +102,7 @@ public class BaseIntegrationTest {
         var oauthServiceHost = dockerComposeContainer.getServiceHost("oauth-service_1", 10101);
         var oauthServicePort = dockerComposeContainer.getServicePort("oauth-service_1", 10101);
 
-        var oauthServiceUrl = String.format("%s:%d", oauthServiceHost, oauthServicePort);
+        var oauthServiceUrl = String.format("http://%s:%d", oauthServiceHost, oauthServicePort);
         log.info("Test: OAuth Service URL: {}", oauthServiceUrl);
 
         registry.add(
@@ -117,16 +116,38 @@ public class BaseIntegrationTest {
     }
 
 
-    private static void setKafkaProperties(DynamicPropertyRegistry registry) {
-        var kafkaHost = dockerComposeContainer.getServiceHost("kafka_1", 29092);
-        var kafkaPort = dockerComposeContainer.getServicePort("kafka_1", 29092);
-
-        var kafkaUrl = String.format("%s:%d", kafkaHost, kafkaPort);
+    private static void setOAuthServiceDbProperties(DynamicPropertyRegistry registry) {
+        var oauthServiceDbHost = dockerComposeContainer.getServiceHost("mysqldb_1", 33080);
+        var oauthServiceDbPort = dockerComposeContainer.getServicePort("mysqldb_1", 33080);
 
         registry.add(
-            "spring.kafka.bootstrap-servers",
-            () -> kafkaUrl
+            "test.code.config.oauth-service.datasource.url",
+            () -> String.format(
+                "jdbc:mysql://%s:%d/oauth_service?createDatabaseIfNotExist=true&serverTimezone=UTC",
+                oauthServiceDbHost, 33080
+            )
         );
+        registry.add(
+            "test.code.config.oauth-service.datasource.username",
+            () -> "root"
+        );
+        registry.add(
+            "test.code.config.oauth-service.datasource.password",
+            () -> "1234567890"
+        );
+    }
+
+
+    private static void setKafkaProperties(DynamicPropertyRegistry registry) {
+//        var kafkaHost = dockerComposeContainer.getServiceHost("kafka_1", 29092);
+//        var kafkaPort = dockerComposeContainer.getServicePort("kafka_1", 29092);
+//
+//        var kafkaUrl = String.format("%s:%d", kafkaHost, kafkaPort);
+//
+//        registry.add(
+//            "spring.kafka.bootstrap-servers",
+//            () -> kafkaUrl
+//        );
     }
 
 

@@ -4,6 +4,7 @@ import com.julianduru.oauthservicelib.component.MutatingReactiveClientRegistrati
 import com.julianduru.oauthservicelib.config.WebClientOAuthConfigurer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesRegistrationAdapter;
@@ -32,6 +33,15 @@ public class TestConfig {
             clientRegistrations.stream().toList()
         );
     }
+
+
+//    @Bean
+//    public WebClient oauthServerWebClient(
+//        @Value("${code.config.oauth2.authorization-server.base-url}") String oauthServerUrl,
+//        WebClientOAuthConfigurer webClientOAuthConfigurer
+//    ) {
+//        return webClientOAuthConfigurer.configureWebClient(oauthServerUrl);
+//    }
 
 
 //    @Bean

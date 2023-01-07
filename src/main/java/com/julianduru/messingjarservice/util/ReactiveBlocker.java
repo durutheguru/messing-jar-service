@@ -1,8 +1,10 @@
 package com.julianduru.messingjarservice.util;
 
 import org.awaitility.Awaitility;
+import org.awaitility.core.ConditionTimeoutException;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -24,18 +26,34 @@ public class ReactiveBlocker<T> {
 
 
     public T getValue() {
-        monoPublisher
-            .map(t -> {
-                value = t;
-                valueSet.set(true);
+        return getValue(10000, false);
+    }
 
-                return value;
-            })
-            .subscribe();
 
-        Awaitility.await().untilTrue(valueSet);
+    public T getValue(long timeoutMillis, boolean error) {
+        try {
+            monoPublisher
+                .map(t -> {
+                    value = t;
+                    valueSet.set(true);
 
-        return value;
+                    return value;
+                })
+                .subscribe();
+
+            Awaitility.await()
+                .atMost(Duration.ofMillis(timeoutMillis))
+                .untilTrue(valueSet);
+
+            return value;
+        }
+        catch (ConditionTimeoutException e) {
+            if (error) {
+                throw e;
+            }
+
+            return null;
+        }
     }
 
 
