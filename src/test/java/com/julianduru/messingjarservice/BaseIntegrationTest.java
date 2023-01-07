@@ -36,7 +36,6 @@ public class BaseIntegrationTest {
     private static boolean testContainersEnabled = true;
 
 
-    @Container
     protected static DockerComposeContainer dockerComposeContainer = new ProfiledDockerComposeContainer(
         testContainersEnabled
     );

@@ -16,7 +16,7 @@ public class ProfiledDockerComposeContainer<SELF extends DockerComposeContainer<
 
 
     public ProfiledDockerComposeContainer(boolean active) {
-        super(new File("src/test/resources/docker-compose--arm64v8.yml"));
+        super(new File("src/test/resources/docker-compose.yml"));
 
         this.active = active;
         withExposedService("mongodb_1", 27017);

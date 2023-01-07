@@ -5,25 +5,14 @@ version: '3.8'
 
 services:
 
-  eureka-discovery-server:
-    image: durutheguru/eureka-discovery-server:latest
-    pull_policy: always
-    restart: always
-    ports:
-      - "8761:8761"
-    stdin_open: true
-    tty: true
-    networks:
-      - docker-net
-
 
   mongodb:
     image: mongo
     restart: always
     environment:
       MONGO_INITDB_DATABASE: messing-jar-db
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: pwd
+    #      MONGO_INITDB_ROOT_USERNAME: root
+    #      MONGO_INITDB_ROOT_PASSWORD: pwd
     ports:
       - "27017:27017"
     volumes:
@@ -31,15 +20,11 @@ services:
     networks:
       - docker-net
     healthcheck:
-#      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/db --quiet 1
-#      test: ["CMD","mongo", "--eval", "db.adminCommand('ping')"]
-      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo -u root -p pwd --quiet) -eq 1
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 300s
       retries: 20
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
-    command:
-      -
 
 
   mysqldb:
@@ -63,6 +48,12 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
+    restart: always
+    healthcheck:
+      test: nc -z localhost 2181 || exit -1
+      interval: 10s
+      timeout: 5s
+      retries: 20
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -75,7 +66,8 @@ services:
   kafka:
     image: confluentinc/cp-kafka:latest
     depends_on:
-      - zookeeper
+      zookeeper:
+        condition: service_healthy
     ports:
       - "29092:29092"
     restart: always
@@ -95,8 +87,7 @@ services:
       mysqldb:
         condition: service_healthy
     image: durutheguru/oauth-service:latest
-    pull_policy: always
-    restart: always
+    restart: on-failure
     ports:
       - "10101:10101"
     volumes:
@@ -105,6 +96,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/oauth_service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1234567890
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     stdin_open: true
     tty: true
     networks:

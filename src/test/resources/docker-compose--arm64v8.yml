@@ -5,16 +5,6 @@ version: '3.8'
 
 services:
 
-#  eureka-discovery-server:
-#    image: durutheguru/eureka-discovery-server:arm64v8-latest
-#    restart: always
-#    ports:
-#      - "8761:8761"
-#    stdin_open: true
-#    tty: true
-#    networks:
-#      - docker-net
-
   mongodb:
     image: mongo
     restart: always
@@ -29,13 +19,12 @@ services:
     networks:
       - docker-net
     healthcheck:
-      #      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/db --quiet 1
-#      test: ["CMD","mongo", "--eval", "db.adminCommand('ping')"]
-      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --eval db.adminCommand('ping')) -eq 0
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 300s
       retries: 20
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+
 
   mysqldb:
     image: mysql:8.0
@@ -86,47 +75,11 @@ services:
       - docker-net
 
 
-#  kafka-2:
-#    image: confluentinc/cp-kafka:latest
-#    depends_on:
-#      - zookeeper
-#    ports:
-#      - "39092:39092"
-#    restart: always
-#    environment:
-#      KAFKA_BROKER_ID: 1
-#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9092,PLAINTEXT_HOST://localhost:39092
-#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-#      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-#    networks:
-#      - docker-net
-
-
-#  kafka-1:
-#    image: confluentinc/cp-kafka:latest
-#    depends_on:
-#      - zookeeper
-#    ports:
-#      - "29092:29092"
-#    restart: always
-#    environment:
-#      KAFKA_BROKER_ID: 1
-#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-#      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-#    networks:
-#      - docker-net
-
-
   oauth-service:
     depends_on:
       mysqldb:
         condition: service_healthy
-    image: durutheguru/oauth-service:testing
+    image: durutheguru/oauth-service:arm64v8-latest
     restart: on-failure
     ports:
       - "10101:10101"
