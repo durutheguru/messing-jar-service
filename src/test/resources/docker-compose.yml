@@ -67,7 +67,7 @@ services:
     image: confluentinc/cp-kafka:latest
     depends_on:
       zookeeper:
-        condition: service_healthy
+        condition: service_started
     ports:
       - "29092:29092"
     restart: always
