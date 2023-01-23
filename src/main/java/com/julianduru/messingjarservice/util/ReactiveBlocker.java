@@ -1,5 +1,6 @@
 package com.julianduru.messingjarservice.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.awaitility.Awaitility;
 import reactor.core.publisher.Mono;
 
@@ -8,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * created by julian on 25/11/2022
  */
+@Slf4j
 public class ReactiveBlocker<T> {
 
     private T value;
@@ -31,6 +33,7 @@ public class ReactiveBlocker<T> {
 
                 return value;
             })
+            .doOnError(e -> log.error(e.getMessage(), e))
             .subscribe();
 
         Awaitility.await().untilTrue(valueSet);
