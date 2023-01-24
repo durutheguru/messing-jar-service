@@ -23,6 +23,7 @@ public interface ChatRepository extends BaseEntityRepository<Chat> {
 
         return findByUser1AndUser2(user1, user2)
             .mergeWith(findByUser1AndUser2(user2, user1))
+            .doOnNext(c -> System.out.println(c.toString()))
             .singleOrEmpty();
     }
 

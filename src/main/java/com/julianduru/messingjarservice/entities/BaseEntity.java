@@ -1,6 +1,7 @@
 package com.julianduru.messingjarservice.entities;
 
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.*;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -12,11 +13,11 @@ import java.time.ZonedDateTime;
  * created by julian on 27/08/2022
  */
 @Data
-public class BaseEntity implements Persistable<String> {
+public class BaseEntity implements Persistable<ObjectId> {
 
 
     @Id
-    private String id;
+    private ObjectId id;
 
 
     @Indexed(unique = true)
