@@ -2,6 +2,7 @@ package com.julianduru.messingjarservice.data;
 
 
 import com.julianduru.util.test.DataProvider;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -12,7 +13,7 @@ public interface MongoDataProvider<T> extends DataProvider<T> {
 
 
 
-    ReactiveMongoRepository<T, String> getRepository();
+    ReactiveMongoRepository<T, ObjectId> getRepository();
 
 
     default Mono<T> save() {

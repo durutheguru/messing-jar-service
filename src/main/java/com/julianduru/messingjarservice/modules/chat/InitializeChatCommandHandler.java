@@ -52,10 +52,10 @@ public class InitializeChatCommandHandler implements MessageCommandHandler {
                 var u2 = u.get(1);
 
                 var chat = new Chat();
-                chat.setUser1(u1);
-                chat.setUser2(u2);
+                chat.setUser1(u1.getId());
+                chat.setUser2(u2.getId());
 
-                var savedChatMono = chatRepository.findExistingChat(u1, u2)
+                var savedChatMono = chatRepository.findExistingChat(u1.getId(), u2.getId())
                         .switchIfEmpty(chatRepository.save(chat));
 
                 return savedChatMono.map(
@@ -66,8 +66,8 @@ public class InitializeChatCommandHandler implements MessageCommandHandler {
 
                         log.info(
                             "Chat initiated {} <> {}",
-                            m.getUser1().getUsername(),
-                            m.getUser2().getUsername()
+                            m.getUser1(),
+                            m.getUser2()
                         );
 
                         return OperationStatus.success();

@@ -2,6 +2,7 @@ package com.julianduru.messingjarservice.repositories;
 
 import com.julianduru.messingjarservice.entities.Chat;
 import com.julianduru.messingjarservice.entities.User;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
@@ -14,10 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public interface ChatRepository extends BaseEntityRepository<Chat> {
 
 
-    Mono<Chat> findByUser1AndUser2(User user1, User user2);
+    Mono<Chat> findByUser1AndUser2(ObjectId user1, ObjectId user2);
 
 
-    default Mono<Chat> findExistingChat(User user1, User user2) {
+    default Mono<Chat> findExistingChat(ObjectId user1, ObjectId user2) {
         assertThat(user1).isNotNull();
         assertThat(user2).isNotNull();
 

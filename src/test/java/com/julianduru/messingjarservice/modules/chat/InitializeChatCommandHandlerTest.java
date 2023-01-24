@@ -55,7 +55,7 @@ public class InitializeChatCommandHandlerTest extends BaseIntegrationTest {
     @Test
     public void initializationOfAChatBetweenTwoUsers() throws Exception {
         var command = new MessageCommand();
-        command.setUsername("1081528362");
+        command.setUsername("0652065201");
         command.setType(MessageCommand.Type.INITIALIZE_CHAT);
         command.setPayload(
             String.format(
@@ -63,7 +63,7 @@ public class InitializeChatCommandHandlerTest extends BaseIntegrationTest {
                 {
                 "username": "%s"
                 }
-                """, "1039564739"
+                """, "099971323X"
             )
         );
 

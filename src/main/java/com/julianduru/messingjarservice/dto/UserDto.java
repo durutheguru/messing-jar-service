@@ -27,7 +27,7 @@ public class UserDto extends BaseDto {
     public static UserDto fromEntity(User user) {
         var dto = new UserDto();
 
-        dto.setId(user.getId());
+        dto.setId(user.getIdString());
         dto.setCode(user.getCode());
         dto.setUsername(user.getUsername());
 

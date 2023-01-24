@@ -46,4 +46,9 @@ public class BaseEntity implements Persistable<ObjectId> {
     }
 
 
+    public String getIdString() {
+        return getId() == null ? null : getId().toString();
+    }
+
+
 }

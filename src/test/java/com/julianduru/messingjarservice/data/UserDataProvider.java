@@ -3,6 +3,7 @@ package com.julianduru.messingjarservice.data;
 import com.julianduru.messingjarservice.entities.User;
 import com.julianduru.messingjarservice.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +29,7 @@ public class UserDataProvider implements MongoDataProvider<User> {
 
 
     @Override
-    public ReactiveMongoRepository<User, String> getRepository() {
+    public ReactiveMongoRepository<User, ObjectId> getRepository() {
         return userRepository;
     }
 
