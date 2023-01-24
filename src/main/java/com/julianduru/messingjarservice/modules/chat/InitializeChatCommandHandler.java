@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -47,11 +48,16 @@ public class InitializeChatCommandHandler implements MessageCommandHandler {
                     );
                 }
 
-                var chat = new Chat();
-                chat.setUser1(u.get(0));
-                chat.setUser2(u.get(1));
+                var u1 = u.get(0);
+                var u2 = u.get(1);
 
-                var savedChatMono = chatRepository.save(chat);
+                var chat = new Chat();
+                chat.setUser1(u1);
+                chat.setUser2(u2);
+
+                var savedChatMono = chatRepository.findExistingChat(u1, u2)
+                        .switchIfEmpty(chatRepository.save(chat));
+
                 return savedChatMono.map(
                     m -> {
                         if (m == null) {
@@ -59,7 +65,7 @@ public class InitializeChatCommandHandler implements MessageCommandHandler {
                         }
 
                         log.info(
-                            "New Chat initiated {} <> {}",
+                            "Chat initiated {} <> {}",
                             m.getUser1().getUsername(),
                             m.getUser2().getUsername()
                         );
