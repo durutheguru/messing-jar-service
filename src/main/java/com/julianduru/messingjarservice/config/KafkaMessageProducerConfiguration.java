@@ -20,7 +20,7 @@ import java.util.Map;
  */
 @Configuration
 @RequiredArgsConstructor
-public class UserNotificationMessageProducerConfiguration {
+public class KafkaMessageProducerConfiguration {
 
 
     private final KafkaProperties kafkaProperties;
@@ -31,7 +31,7 @@ public class UserNotificationMessageProducerConfiguration {
 
 
     @Bean
-    public Map<String, Object> userNotificationProducerConfigs() {
+    public Map<String, Object> messageProducerConfig() {
         var props = new HashMap<>(kafkaProperties.buildProducerProperties());
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -41,14 +41,14 @@ public class UserNotificationMessageProducerConfiguration {
 
 
     @Bean
-    public ProducerFactory<String, String> userNotificationProducerFactory() {
-        return new DefaultKafkaProducerFactory<>(userNotificationProducerConfigs());
+    public ProducerFactory<String, String> messageProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(messageProducerConfig());
     }
 
 
     @Bean
-    public KafkaTemplate<String, String> userNotificationKafkaTemplate() {
-        return new KafkaTemplate<>(userNotificationProducerFactory());
+    public KafkaTemplate<String, String> messageProducerKafkaTemplate() {
+        return new KafkaTemplate<>(messageProducerFactory());
     }
 
 

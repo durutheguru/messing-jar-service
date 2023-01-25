@@ -1,7 +1,6 @@
 package com.julianduru.messingjarservice.repositories;
 
 import com.julianduru.messingjarservice.entities.Chat;
-import com.julianduru.messingjarservice.entities.User;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;

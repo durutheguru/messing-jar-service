@@ -1,19 +1,23 @@
 package com.julianduru.messingjarservice.modules.chat;
 
+import com.julianduru.messingjarservice.ServiceConstants;
 import com.julianduru.messingjarservice.entities.Chat;
 import com.julianduru.messingjarservice.modules.chat.dto.ChatInitialization;
 import com.julianduru.messingjarservice.modules.messaging.MessageCommand;
 import com.julianduru.messingjarservice.modules.messaging.MessageCommandHandler;
+import com.julianduru.messingjarservice.modules.user.NotificationService;
+import com.julianduru.messingjarservice.repositories.ChatMessageRepository;
 import com.julianduru.messingjarservice.repositories.ChatRepository;
 import com.julianduru.messingjarservice.repositories.UserRepository;
 import com.julianduru.util.JSONUtil;
 import com.julianduru.util.api.OperationStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,6 +33,12 @@ public class InitializeChatCommandHandler implements MessageCommandHandler {
 
 
     private final UserRepository userRepository;
+
+
+    private final ChatMessageRepository chatMessageRepository;
+
+
+    private final NotificationService notificationService;
 
 
     @Override
@@ -55,8 +65,28 @@ public class InitializeChatCommandHandler implements MessageCommandHandler {
                 chat.setUser1(u1.getId());
                 chat.setUser2(u2.getId());
 
-                var savedChatMono = chatRepository.findExistingChat(u1.getId(), u2.getId())
-                        .switchIfEmpty(chatRepository.save(chat));
+                var savedChatMono = chatRepository
+                    .findExistingChat(u1.getId(), u2.getId())
+                    .doOnNext(existingChat -> {
+                        // TODO:
+                        chatMessageRepository.findByChatId(
+                            existingChat.getId(),
+                            PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createdDate"))
+                        ).collectList()
+                            .doOnNext(list -> {
+                                if (list.isEmpty()) {
+                                    return;
+                                }
+
+                                notificationService.writeUserNotification(
+                                    initiator,
+                                    ServiceConstants.NotificationType.CHAT_HISTORY,
+                                    JSONUtil.asJsonString(list, "")
+                                );
+                            })
+                            .subscribe();
+                    })
+                    .switchIfEmpty(chatRepository.save(chat));
 
                 return savedChatMono.map(
                     m -> {

@@ -13,6 +13,8 @@ public interface ServiceConstants {
 
         String PROFILE_DETAILS_UPDATE = "profile-details-update";
 
+        String CHAT_HISTORY = "chat-history";
+
     }
 
 

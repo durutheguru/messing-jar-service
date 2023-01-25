@@ -63,7 +63,7 @@ public class MessageCommandConsumer {
 
     @KafkaListener(
         topics = {"user-command"},
-        groupId = "kafkaUserNotificationsListenerContainerFactory"
+        groupId = "userCommandListenerGroup"
     )
     public void onMessage(ConsumerRecord<String, String> record) {
         try {
