@@ -6,7 +6,7 @@ import lombok.Data;
  * created by julian on 21/01/2023
  */
 @Data
-public class ChatInitialization {
+public class ChatInitializationDto {
 
 
     private String username;

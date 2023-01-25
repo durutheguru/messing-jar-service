@@ -2,7 +2,7 @@ package com.julianduru.messingjarservice.modules.chat;
 
 import com.julianduru.messingjarservice.ServiceConstants;
 import com.julianduru.messingjarservice.entities.Chat;
-import com.julianduru.messingjarservice.modules.chat.dto.ChatInitialization;
+import com.julianduru.messingjarservice.modules.chat.dto.ChatInitializationDto;
 import com.julianduru.messingjarservice.modules.messaging.MessageCommand;
 import com.julianduru.messingjarservice.modules.messaging.MessageCommandHandler;
 import com.julianduru.messingjarservice.modules.user.NotificationService;
@@ -45,7 +45,7 @@ public class InitializeChatCommandHandler implements MessageCommandHandler {
     public Mono<OperationStatus<String>> handle(MessageCommand command) throws Exception {
         var initiator = command.getUsername();
         var initializationRequest = JSONUtil.fromJsonString(
-            command.getPayload(), ChatInitialization.class
+            command.getPayload(), ChatInitializationDto.class
         );
 
         var usernames = List.of(initiator, initializationRequest.getUsername());

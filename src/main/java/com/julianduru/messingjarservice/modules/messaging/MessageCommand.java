@@ -28,7 +28,9 @@ public class MessageCommand {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     public enum Type {
 
-        INITIALIZE_CHAT
+        INITIALIZE_CHAT,
+
+        CHAT_MESSAGE,
 
     }
 
