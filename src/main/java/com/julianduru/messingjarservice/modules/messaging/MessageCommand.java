@@ -1,5 +1,6 @@
 package com.julianduru.messingjarservice.modules.messaging;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class MessageCommand {
     private String payload;
 
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     public enum Type {
 
         INITIALIZE_CHAT
