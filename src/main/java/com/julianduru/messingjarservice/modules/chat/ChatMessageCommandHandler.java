@@ -77,13 +77,24 @@ public class ChatMessageCommandHandler implements MessageCommandHandler {
                         chatMessage.setMessage(chatMessageRequest.getMessage());
                         chatMessage.setChatId(chat.getId());
 
-                        chatMessageRepository.save(chatMessage).subscribe();
+                        chatMessageRepository.save(chatMessage)
+                            .doOnNext(cm -> {
+                                var notification = JSONUtil.asJsonString(
+                                    ChatMessageDto.from(cm, sender, receiver), ""
+                                );
 
-                        notificationService.writeUserNotification(
-                            receiverUsername,
-                            ServiceConstants.NotificationType.NEW_CHAT_MESSAGE,
-                            JSONUtil.asJsonString(chatMessage, "")
-                        );
+                                notificationService.writeUserNotification(
+                                    receiverUsername,
+                                    ServiceConstants.NotificationType.NEW_CHAT_MESSAGE,
+                                    notification
+                                );
+
+                                notificationService.writeUserNotification(
+                                    senderUsername,
+                                    ServiceConstants.NotificationType.NEW_CHAT_MESSAGE,
+                                    notification
+                                );
+                            }).subscribe();
 
                         return OperationStatus.success();
                     })
