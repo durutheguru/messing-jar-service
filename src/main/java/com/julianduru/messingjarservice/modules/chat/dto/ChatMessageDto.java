@@ -52,10 +52,15 @@ public class ChatMessageDto {
 
 
     public static ChatMessageDto from(ChatMessage msg, User sender, User receiver) {
+        return from(msg, sender.getUsername(), receiver.getUsername());
+    }
+
+
+    public static ChatMessageDto from(ChatMessage msg, String senderUsername, String receiverUsername) {
         return ChatMessageDto.builder()
             .id(msg.getIdString())
-            .from(sender.getUsername())
-            .to(receiver.getUsername())
+            .from(senderUsername)
+            .to(receiverUsername)
             .message(msg.getMessage())
             .timeSent(
                 msg.getCreatedDate() != null ?

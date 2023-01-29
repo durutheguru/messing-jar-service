@@ -28,8 +28,6 @@ public class UserDetailsReader {
 
     private final FileUploadRepository fileUploadRepository;
 
-    private final MessingJarFileUploadRepository messingJarFileUploadRepository;
-
 
     public Mono<UserDataDto> fetchUserDetails(String username) {
         userSaver.saveUser(

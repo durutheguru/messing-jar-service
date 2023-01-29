@@ -1,11 +1,17 @@
 package com.julianduru.messingjarservice.modules.chat;
 
 import com.julianduru.messingjarservice.ServiceConstants;
+import com.julianduru.messingjarservice.entities.BaseEntity;
 import com.julianduru.messingjarservice.entities.Chat;
+import com.julianduru.messingjarservice.entities.ChatMessage;
+import com.julianduru.messingjarservice.entities.User;
 import com.julianduru.messingjarservice.modules.chat.dto.ChatInitializationDto;
+import com.julianduru.messingjarservice.modules.chat.dto.ChatInitializationResponseDto;
+import com.julianduru.messingjarservice.modules.chat.dto.ChatMessageDto;
 import com.julianduru.messingjarservice.modules.messaging.MessageCommand;
 import com.julianduru.messingjarservice.modules.messaging.MessageCommandHandler;
 import com.julianduru.messingjarservice.modules.user.NotificationService;
+import com.julianduru.messingjarservice.modules.user.UserService;
 import com.julianduru.messingjarservice.repositories.ChatMessageRepository;
 import com.julianduru.messingjarservice.repositories.ChatRepository;
 import com.julianduru.messingjarservice.repositories.UserRepository;
@@ -18,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -33,6 +40,9 @@ public class InitializeChatCommandHandler implements MessageCommandHandler {
 
 
     private final UserRepository userRepository;
+
+
+    private final UserService userService;
 
 
     private final ChatMessageRepository chatMessageRepository;
@@ -78,11 +88,34 @@ public class InitializeChatCommandHandler implements MessageCommandHandler {
                                     return;
                                 }
 
-                                notificationService.writeUserNotification(
-                                    initiator,
-                                    ServiceConstants.NotificationType.CHAT_HISTORY,
-                                    JSONUtil.asJsonString(list, "")
+                                var initiatorDetails = userService.fetchUserDetails(initiator);
+                                var receiverDetails = userService.fetchUserDetails(
+                                    initializationRequest.getUsername()
                                 );
+
+                                Mono.zip(initiatorDetails, receiverDetails)
+                                    .doOnNext(
+                                        tuple -> {
+                                            var response = ChatInitializationResponseDto
+                                                .builder()
+                                                .initiatorDetails(tuple.getT1())
+                                                .receiverDetails(tuple.getT2())
+                                                .history(
+                                                    list.stream()
+                                                        .sorted(Comparator.comparing(BaseEntity::getCreatedDate))
+                                                        .map(chatMessage -> map(chatMessage, u1, u2))
+                                                        .toList()
+                                                )
+                                                .build();
+
+                                            notificationService.writeUserNotification(
+                                                initiator,
+                                                ServiceConstants.NotificationType.CHAT_HISTORY,
+                                                response
+                                            );
+                                        }
+                                    )
+                                    .subscribe();
                             })
                             .subscribe();
                     })
@@ -104,6 +137,14 @@ public class InitializeChatCommandHandler implements MessageCommandHandler {
                     }
                 );
             });
+    }
+
+
+    private ChatMessageDto map(ChatMessage message, User u1, User u2) {
+        var sender = message.getFromUserId().compareTo(u1.getId()) == 0  ? u1 : u2;
+        var receiver = message.getToUserId().compareTo(u1.getId()) == 0 ? u1 : u2;
+
+        return ChatMessageDto.from(message, sender, receiver);
     }
 
 
