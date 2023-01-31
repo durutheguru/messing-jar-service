@@ -38,6 +38,10 @@ public class ChatMessage extends BaseEntity {
     private ZonedDateTime dateReceived;
 
 
+    @NotNull(message = "Chat Message Type is required")
+    private ChatMessageType type;
+
+
     private boolean viewed;
 
 

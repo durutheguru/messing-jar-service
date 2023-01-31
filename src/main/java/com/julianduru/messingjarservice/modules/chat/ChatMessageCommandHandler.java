@@ -76,6 +76,7 @@ public class ChatMessageCommandHandler implements MessageCommandHandler {
                         chatMessage.setToUserId(receiver.getId());
                         chatMessage.setMessage(chatMessageRequest.getMessage());
                         chatMessage.setChatId(chat.getId());
+                        chatMessage.setType(chatMessageRequest.getType());
 
                         chatMessageRepository.save(chatMessage)
                             .doOnNext(cm -> {

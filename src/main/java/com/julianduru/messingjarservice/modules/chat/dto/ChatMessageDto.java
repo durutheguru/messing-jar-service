@@ -1,6 +1,8 @@
 package com.julianduru.messingjarservice.modules.chat.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.julianduru.messingjarservice.entities.ChatMessage;
+import com.julianduru.messingjarservice.entities.ChatMessageType;
 import com.julianduru.messingjarservice.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +34,10 @@ public class ChatMessageDto {
     private String message;
 
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private ChatMessageType type;
+
+
     private ZonedDateTime timeSent;
 
 
@@ -47,6 +53,7 @@ public class ChatMessageDto {
                     ZonedDateTime.of(msg.getCreatedDate(), ZoneId.systemDefault()) :
                     null
             )
+            .type(msg.getType())
             .build();
     }
 
@@ -62,6 +69,7 @@ public class ChatMessageDto {
             .from(senderUsername)
             .to(receiverUsername)
             .message(msg.getMessage())
+            .type(msg.getType())
             .timeSent(
                 msg.getCreatedDate() != null ?
                     ZonedDateTime.of(msg.getCreatedDate(), ZoneId.systemDefault()) :
