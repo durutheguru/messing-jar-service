@@ -33,7 +33,7 @@ public class BaseIntegrationTest {
     protected Faker faker = new Faker();
 
 
-    private static boolean testContainersEnabled = true;
+    private static boolean testContainersEnabled = false;
 
 
     protected static DockerComposeContainer dockerComposeContainer = new ProfiledDockerComposeContainer(
