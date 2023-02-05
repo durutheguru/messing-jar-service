@@ -36,4 +36,9 @@ public class UserDataDto {
     private boolean enableEmails;
 
 
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+
 }

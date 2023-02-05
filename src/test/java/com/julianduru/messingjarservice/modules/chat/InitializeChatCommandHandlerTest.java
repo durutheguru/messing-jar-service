@@ -60,7 +60,6 @@ public class InitializeChatCommandHandlerTest extends BaseIntegrationTest {
 
         var response = new ReactiveBlocker<>(chatCommandHandler.handle(command)).getValue();
         assertThat(response.getStatus()).isEqualTo(OperationStatus.Value.SUCCESS);
-
     }
 
 
@@ -108,3 +107,4 @@ public class InitializeChatCommandHandlerTest extends BaseIntegrationTest {
 //    }
 
 }
+

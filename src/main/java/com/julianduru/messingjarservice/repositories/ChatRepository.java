@@ -2,7 +2,9 @@ package com.julianduru.messingjarservice.repositories;
 
 import com.julianduru.messingjarservice.entities.Chat;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,6 +28,9 @@ public interface ChatRepository extends BaseEntityRepository<Chat> {
             .doOnNext(c -> System.out.println(c.toString()))
             .singleOrEmpty();
     }
+
+
+    Flux<Chat> findByUser1OrUser2(ObjectId user1, ObjectId user2, Pageable pageable);
 
 
 }

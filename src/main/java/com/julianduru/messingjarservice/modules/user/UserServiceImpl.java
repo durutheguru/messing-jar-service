@@ -14,6 +14,7 @@ import com.julianduru.oauthservicelib.modules.user.UserDataService;
 import com.julianduru.util.api.OperationStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -100,6 +101,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<UserDataDto> fetchUserDetails(String username) {
         return userDetailsReader.fetchUserDetails(username);
+    }
+
+
+    @Override
+    public Mono<UserDataDto> fetchUserDetails(ObjectId userId) {
+        return userRepository.findById(userId)
+            .flatMap(user -> userDetailsReader.fetchUserDetails(user.getUsername()));
     }
 
 

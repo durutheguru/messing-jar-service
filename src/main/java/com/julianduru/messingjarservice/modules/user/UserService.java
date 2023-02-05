@@ -3,6 +3,7 @@ package com.julianduru.messingjarservice.modules.user;
 import com.julianduru.messingjarservice.dto.UserDto;
 import com.julianduru.messingjarservice.entities.User;
 import com.julianduru.messingjarservice.modules.user.dto.UserDataDto;
+import org.bson.types.ObjectId;
 import reactor.core.publisher.Mono;
 
 /**
@@ -18,6 +19,9 @@ public interface UserService {
 
 
     Mono<UserDataDto> fetchUserDetails(String username);
+
+
+    Mono<UserDataDto> fetchUserDetails(ObjectId userId);
 
 
 }

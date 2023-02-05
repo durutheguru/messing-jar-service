@@ -1,0 +1,9 @@
+
+
+extend type Query {
+
+    fetchChatPreviews(page: Int = 0, size: Int = 5): [ChatPreview]
+
+}
+
+

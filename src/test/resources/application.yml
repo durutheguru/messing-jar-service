@@ -42,7 +42,7 @@ code:
 spring:
     data:
         mongodb:
-            database: ${SPRING_MONGO_DBNAME:messing-jar-db-2}
+            database: ${SPRING_MONGO_DBNAME:messing-jar-db}
             host: ${SPRING_MONGO_HOST:localhost}
             port: ${SPRING_MONGO_PORT:27017}
             username: username
