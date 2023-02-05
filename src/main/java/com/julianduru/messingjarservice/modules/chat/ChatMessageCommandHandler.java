@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -69,6 +70,10 @@ public class ChatMessageCommandHandler implements MessageCommandHandler {
                 return chatRepository
                     .findExistingChat(sender.getId(), receiver.getId())
                     .switchIfEmpty(Mono.error(new IllegalStateException("Cannot find chat between the users")))
+                    .flatMap(chat -> {
+                        chat.setLastMessageTime(LocalDateTime.now());
+                        return chatRepository.save(chat);
+                    })
                     .map(chat -> {
                         var chatMessage = new ChatMessage();
 
