@@ -103,6 +103,18 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.graphql-java-kickstart</groupId>
+			<artifactId>graphql-spring-boot-starter</artifactId>
+			<version>15.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.zalando</groupId>
+			<artifactId>logbook-spring-boot-starter</artifactId>
+			<version>2.14.0</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.julianduru</groupId>
 			<artifactId>oauth-service-lib</artifactId>
 			<version>0.8.16-133-SNAPSHOT</version>
@@ -118,6 +130,13 @@
 			<groupId>org.testcontainers</groupId>
 			<artifactId>mongodb</artifactId>
 			<version>${testcontainers.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.graphql-java-kickstart</groupId>
+			<artifactId>graphql-spring-boot-starter-test</artifactId>
+			<version>11.1.0</version>
 			<scope>test</scope>
 		</dependency>
 

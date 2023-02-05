@@ -1,0 +1,12 @@
+
+
+type ChatPreview {
+
+    fullName: String
+    imagePublicUrl: String
+    lastMessage: String
+    lastMessageTimeStamp: String
+
+}
+
+
