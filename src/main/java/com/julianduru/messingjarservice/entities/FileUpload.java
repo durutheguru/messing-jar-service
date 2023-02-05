@@ -3,6 +3,7 @@ package com.julianduru.messingjarservice.entities;
 import com.julianduru.fileuploader.UploadRequest;
 import com.julianduru.fileuploader.providers.UploadProvider;
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
@@ -82,7 +83,7 @@ public class FileUpload extends BaseEntity {
         fileUpload.setOriginalFileName(upload.getOriginalFileName());
         fileUpload.setFileType(upload.getFileType());
         fileUpload.setProvider(upload.getProvider());
-        fileUpload.setId(StringUtils.hasText(upload.getId()) ? String.valueOf(upload.getId()) : null);
+        fileUpload.setId(StringUtils.hasText(upload.getId()) ? new ObjectId(upload.getId()) : null);
         fileUpload.setPublicUrl(upload.getPublicUrl());
 
         return fileUpload;
@@ -99,7 +100,7 @@ public class FileUpload extends BaseEntity {
         fileUpload.setOriginalFileName(getOriginalFileName());
         fileUpload.setFileType(getFileType());
         fileUpload.setProvider(getProvider());
-        fileUpload.setId(getId());
+        fileUpload.setId(getId() != null? getId().toString(): null);
         fileUpload.setPublicUrl(getPublicUrl());
 
         return fileUpload;

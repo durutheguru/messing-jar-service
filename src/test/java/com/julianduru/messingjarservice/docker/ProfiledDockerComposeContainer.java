@@ -16,17 +16,20 @@ public class ProfiledDockerComposeContainer<SELF extends DockerComposeContainer<
 
 
     public ProfiledDockerComposeContainer(boolean active) {
-        super(new File("src/test/resources/docker-compose--arm64v8.yml"));
+        super(new File("src/test/resources/docker-compose.yml"));
 
         this.active = active;
         withExposedService("mongodb_1", 27017);
         withExposedService(
-            "oauth-service_1", 10101,
-            Wait.forHttp("/")
-                .forStatusCodeMatching(code -> code >= 200 && code <= 500)
-                .withStartupTimeout(Duration.ofSeconds(400))
+            "mysqldb_1", 33080,
+            Wait.forHealthcheck()
+                .withStartupTimeout(Duration.ofSeconds(600))
         );
-//        withExposedService("eureka-discovery-server_1", 8761);
+        withExposedService(
+            "oauth-service_1", 10101,
+            Wait.forListeningPort()
+                .withStartupTimeout(Duration.ofSeconds(600))
+        );
         withExposedService("kafka_1", 29092);
         withTailChildContainers(true);
     }

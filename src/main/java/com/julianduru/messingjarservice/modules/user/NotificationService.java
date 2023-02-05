@@ -32,17 +32,14 @@ public class NotificationService {
     private final Writer writer;
 
 
-    private final KafkaTemplate<String, String> userNotificationKafkaTemplate;
-
-
-    private final FileUploadRepository fileUploadRepository;
+    private final KafkaTemplate<String, String> messageProducerKafkaTemplate;
 
 
 
     public <T> OperationStatus<String> writeUserNotification(String username, String notificationType, T data) {
         try {
             writer.write(
-                userNotificationKafkaTemplate,
+                messageProducerKafkaTemplate,
                 pushNotificationTopicName,
                 UUID.randomUUID().toString(),
                 String.format(

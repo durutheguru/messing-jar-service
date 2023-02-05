@@ -30,7 +30,21 @@
 		<code.coverage.exclusions>
 			src/test/java/**
 		</code.coverage.exclusions>
+		<diffChangeLogFile>/.</diffChangeLogFile>
 	</properties>
+
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.github.cloudyrock.mongock</groupId>
+				<artifactId>mongock-bom</artifactId>
+				<version>5.0.2.BETA</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 
 	<dependencies>
@@ -145,10 +159,19 @@
 			<classifier>osx-aarch_64</classifier>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.dkanejs.maven.plugins/docker-compose-maven-plugin -->
+		<dependency>
+			<groupId>com.dkanejs.maven.plugins</groupId>
+			<artifactId>docker-compose-maven-plugin</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -172,10 +195,40 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>com.dkanejs.maven.plugins</groupId>
+				<artifactId>docker-compose-maven-plugin</artifactId>
+				<version>4.0.0</version>
+				<executions>
+					<execution>
+						<id>up</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>up</goal>
+						</goals>
+						<configuration>
+							<detachedMode>true</detachedMode>
+							<composeFile>${project.basedir}/src/main/resources/docker-compose.yml</composeFile>
+							<apiVersion>3.8</apiVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>down</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>down</goal>
+						</goals>
+						<configuration>
+							<removeVolumes>false</removeVolumes>
+							<composeFile>${project.basedir}/src/main/resources/docker-compose.yml</composeFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 
 </project>
-
-
 

@@ -28,8 +28,6 @@ public class UserDetailsReader {
 
     private final FileUploadRepository fileUploadRepository;
 
-    private final MessingJarFileUploadRepository messingJarFileUploadRepository;
-
 
     public Mono<UserDataDto> fetchUserDetails(String username) {
         userSaver.saveUser(
@@ -65,7 +63,9 @@ public class UserDetailsReader {
                 dto.setFirstName(oauthUserData.getFirstName());
                 dto.setLastName(oauthUserData.getLastName());
                 dto.setEnableEmails(settings.isEnableEmails());
-                dto.setProfilePhotoRef(oauthUserData.getAdditionalInfo().get("profile_photo"));
+                if (oauthUserData.getAdditionalInfo() != null) {
+                    dto.setProfilePhotoRef(oauthUserData.getAdditionalInfo().get("profile_photo"));
+                }
 
                 if (StringUtils.hasText(dto.getProfilePhotoRef())) {
                     var profileUpload = fileUploadRepository.findByReference(dto.getProfilePhotoRef());
