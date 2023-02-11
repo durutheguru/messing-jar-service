@@ -1,9 +1,11 @@
+
 code:
     config:
         crypto:
             default-algorithm: AES/ECB/PKCS5Padding
             default-key: SecretKey180389189381y511789314
         kafka:
+            enabled: true
             oauth-service:
                 topic-name: oauth-user-data-update-log
             user-push-notification:
@@ -39,7 +41,22 @@ code:
         web:
             cors:
                 allowed-origins: http://127.0.0.1:5173
+
+
+graphql:
+    servlet:
+        websocket:
+            enabled: false
+
+logging:
+    level:
+        org:
+            zalando:
+                logbook: TRACE
+
 spring:
+    main:
+        web-application-type: REACTIVE
     data:
         mongodb:
             database: ${SPRING_MONGO_DBNAME:messing-jar-db}
@@ -47,6 +64,9 @@ spring:
             port: ${SPRING_MONGO_PORT:27017}
             username: username
             password: password
+    graphql:
+        graphiql:
+            enabled: true
     kafka:
         bootstrap-servers: localhost:29092
     security:
@@ -107,5 +127,6 @@ file.uploader.file-key-prefix: uploads/
 jasypt.encryptor.password: socialotto.africa
 jasypt.encryptor.algorithm: PBEWithMD5AndDES
 jasypt.encryptor.iv-generator-classname: org.jasypt.iv.NoIvGenerator
+
 
 

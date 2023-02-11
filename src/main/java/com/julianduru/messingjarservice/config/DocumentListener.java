@@ -1,11 +1,9 @@
 package com.julianduru.messingjarservice.config;
 
 import com.julianduru.messingjarservice.entities.BaseEntity;
-import org.bson.Document;
 import org.reactivestreams.Publisher;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.mapping.event.ReactiveBeforeConvertCallback;
-import org.springframework.data.mongodb.core.mapping.event.ReactiveBeforeSaveCallback;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;

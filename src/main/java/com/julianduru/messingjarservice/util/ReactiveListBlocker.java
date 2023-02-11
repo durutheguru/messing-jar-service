@@ -38,11 +38,8 @@ public class ReactiveListBlocker<T> {
             })
             .doOnComplete(() -> valuesSet.set(true))
             .subscribe(
-                i -> System.out.println("Item: " + i),
-                e -> {
-                    System.err.println("Error..." + e.getMessage());
-                    log.error("Error while fetching reactive list", e);
-                }
+                i -> log.info("Item: " + i),
+                e -> log.error("Error while fetching reactive list", e)
             );
 
         Awaitility.await().untilTrue(valuesSet);

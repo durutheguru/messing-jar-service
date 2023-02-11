@@ -2,7 +2,7 @@ package com.julianduru.messingjarservice.modules.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.julianduru.fileuploader.repositories.FileUploadRepository;
-import com.julianduru.kafkaintegrationlib.Writer;
+import com.julianduru.kafkaintegrationlib.KafkaWriter;
 import com.julianduru.messingjarservice.ServiceConstants;
 import com.julianduru.messingjarservice.modules.user.dto.UserDataDto;
 import com.julianduru.util.JSONUtil;
@@ -29,7 +29,7 @@ public class NotificationService {
     private String pushNotificationTopicName;
 
 
-    private final Writer writer;
+    private final KafkaWriter writer;
 
 
     private final KafkaTemplate<String, String> messageProducerKafkaTemplate;

@@ -1,8 +1,8 @@
 package com.julianduru.messingjarservice.entities;
 
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 /**
  * created by julian on 21/01/2023
@@ -12,12 +12,11 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 public class GroupUser extends BaseEntity {
 
 
-    @DocumentReference
-    private Group group;
+    private ObjectId groupId;
 
 
-    @DocumentReference
-    private User user;
+    private ObjectId userId;
 
 
 }
+

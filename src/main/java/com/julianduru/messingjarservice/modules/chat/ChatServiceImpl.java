@@ -13,6 +13,7 @@ import com.julianduru.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -42,8 +43,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public List<ChatPreviewDto> fetchChatPreviews(int page, int size) {
         var auth = AuthUtil.authR();
-
-        String username = "remilekun";
+        String username = ((User)new ReactiveBlocker<>(auth).getValue().getPrincipal()).getUsername();
 
         var previewsMono = userRepository
             .findByUsername(username)

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesRegistrationAdapter;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -13,6 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.testcontainers.containers.DockerComposeContainer;
+import org.zalando.logbook.DefaultHttpLogWriter;
+import org.zalando.logbook.HttpLogWriter;
 
 /**
  * created by julian on 31/08/2022
@@ -32,6 +35,13 @@ public class TestConfig {
         return new MutatingReactiveClientRegistrationRepository(
             clientRegistrations.stream().toList()
         );
+    }
+
+
+
+    @Bean
+    public HttpLogWriter zalandoLogWriter() {
+        return new DefaultHttpLogWriter();
     }
 
 

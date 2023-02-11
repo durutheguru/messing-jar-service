@@ -1,9 +1,11 @@
 package com.julianduru.messingjarservice.graphql.chats;
 
+import com.julianduru.messingjarservice.modules.chat.ChatService;
 import com.julianduru.messingjarservice.modules.chat.dto.ChatPreviewDto;
-//import graphql.kickstart.tools.GraphQLQueryResolver;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
@@ -11,16 +13,17 @@ import java.util.List;
 /**
  * created by julian on 05/02/2023
  */
-@Component
+@Controller
 @RequiredArgsConstructor
 public class ChatQueryResolver {
 
 
+    private final ChatService chatService;
 
 
-    public List<ChatPreviewDto> fetchChatPreviews(int page, int size) {
-
-        return null;
+    @QueryMapping
+    public List<ChatPreviewDto> fetchChatPreviews(@Argument int page, @Argument int size) {
+        return chatService.fetchChatPreviews(page, size);
     }
 
 

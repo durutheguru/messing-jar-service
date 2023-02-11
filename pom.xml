@@ -99,31 +99,24 @@
 		<dependency>
 			<groupId>com.julianduru</groupId>
 			<artifactId>kafka-integration-lib</artifactId>
-			<version>0.2.0-SNAPSHOT</version>
+			<version>0.2.1-SNAPSHOT</version>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>com.graphql-java-kickstart</groupId>-->
-<!--			<artifactId>graphql-spring-boot-starter</artifactId>-->
-<!--			<version>11.1.0</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-graphql</artifactId>
+		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>com.graphql-java</groupId>-->
-<!--			<artifactId>graphql-java</artifactId>-->
-<!--			<version>16.2</version>-->
-<!--		</dependency>-->
-
-<!--		<dependency>-->
-<!--			<groupId>org.zalando</groupId>-->
-<!--			<artifactId>logbook-spring-boot-starter</artifactId>-->
-<!--			<version>2.14.0</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.zalando</groupId>
+			<artifactId>logbook-spring-boot-starter</artifactId>
+			<version>2.14.0</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.julianduru</groupId>
 			<artifactId>oauth-service-lib</artifactId>
-			<version>0.8.16-133-SNAPSHOT</version>
+			<version>0.8.16-134-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.julianduru</groupId>
@@ -139,12 +132,11 @@
 			<scope>test</scope>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>com.graphql-java-kickstart</groupId>-->
-<!--			<artifactId>graphql-spring-boot-starter-test</artifactId>-->
-<!--			<version>11.1.0</version>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.graphql</groupId>
+			<artifactId>spring-graphql-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.testcontainers</groupId>

@@ -17,6 +17,7 @@ public class FetchChatPreviewsTest extends BaseIntegrationTest {
     private ChatService chatService;
 
 
+
     @Test
     public void fetchChatPreviews() {
         var previews = chatService.fetchChatPreviews(0, 5);
