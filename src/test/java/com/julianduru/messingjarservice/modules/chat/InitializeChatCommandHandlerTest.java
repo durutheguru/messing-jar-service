@@ -1,9 +1,9 @@
 package com.julianduru.messingjarservice.modules.chat;
 
 import com.julianduru.messingjarservice.BaseIntegrationTest;
-import com.julianduru.messingjarservice.data.ChatMessageProvider;
-import com.julianduru.messingjarservice.data.ChatProvider;
-import com.julianduru.messingjarservice.data.UserDataProvider;
+import com.julianduru.messingjarservice.data.entities.ChatMessageProvider;
+import com.julianduru.messingjarservice.data.entities.ChatProvider;
+import com.julianduru.messingjarservice.data.entities.UserDataProvider;
 import com.julianduru.messingjarservice.modules.messaging.MessageCommand;
 import com.julianduru.messingjarservice.util.ReactiveBlocker;
 import com.julianduru.messingjarservice.util.ReactiveListBlocker;

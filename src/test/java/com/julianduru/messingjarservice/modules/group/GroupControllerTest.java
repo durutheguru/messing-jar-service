@@ -1,7 +1,7 @@
 package com.julianduru.messingjarservice.modules.group;
 
-import com.julianduru.messingjarservice.data.GroupDtoProvider;
-import com.julianduru.messingjarservice.data.GroupUserDtoProvider;
+import com.julianduru.messingjarservice.data.dto.GroupDtoProvider;
+import com.julianduru.messingjarservice.data.dto.GroupUserDtoProvider;
 import com.julianduru.messingjarservice.modules.BaseControllerTest;
 import com.julianduru.util.JSONUtil;
 import org.bson.types.ObjectId;

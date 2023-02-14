@@ -1,0 +1,8 @@
+
+extend type Query {
+
+
+    fetchGroupPreviews(page: Int = 0, size: Int = 5): [GroupChatPreview]
+
+
+}

@@ -1,9 +1,11 @@
 package com.julianduru.messingjarservice.entities;
 
+import com.julianduru.messingjarservice.util.ZonedDateTimeToDocumentConverter;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Convert;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;

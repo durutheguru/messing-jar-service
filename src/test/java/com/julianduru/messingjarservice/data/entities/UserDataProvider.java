@@ -1,5 +1,6 @@
-package com.julianduru.messingjarservice.data;
+package com.julianduru.messingjarservice.data.entities;
 
+import com.julianduru.messingjarservice.data.MongoDataProvider;
 import com.julianduru.messingjarservice.entities.User;
 import com.julianduru.messingjarservice.modules.user.UserRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.julianduru.messingjarservice.data;
+package com.julianduru.messingjarservice.data.dto;
 
 import com.julianduru.messingjarservice.modules.user.dto.UserDataDto;
 import com.julianduru.util.test.DataProvider;

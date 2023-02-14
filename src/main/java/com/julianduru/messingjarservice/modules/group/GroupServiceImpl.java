@@ -124,12 +124,11 @@ public class GroupServiceImpl implements GroupService {
                             .toList();
 
                         var groupIds = groups.stream().map(Group::getId).toList();
-                        return groupMessageRepository
-                            .findByGroupIdInOrderByCreatedDateDesc(
-                                groupIds, PageRequest.of(0, 1)
-                            )
+                        return groupIds.stream()
+                            .map(groupMessageRepository::findFirstByGroupIdOrderByCreatedDateDesc)
                             .map(
-                                groupMessage -> {
+                                groupMessageMono -> {
+                                    var groupMessage = groupMessageMono.toFuture().join();
                                     var group = groups.stream().filter(g -> g.getId().equals(groupMessage.getGroupId())).findFirst().get();
                                     var groupPreviewDto = new GroupPreviewDto();
 
@@ -147,14 +146,17 @@ public class GroupServiceImpl implements GroupService {
 
                                     return groupPreviewDto;
                                 }
-                            );
+                            ).toList();
                     }
                     catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }
-            ).cast(GroupPreviewDto.class)
-            .collectList().toFuture().get();
+            )
+            .collectList().toFuture().get()
+            .stream()
+            .flatMap(List::stream)
+            .toList();
     }
 
 

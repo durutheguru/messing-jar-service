@@ -1,4 +1,4 @@
-package com.julianduru.messingjarservice.graphql.chats;
+package com.julianduru.messingjarservice.modules.chat.gql;
 
 import com.julianduru.messingjarservice.BaseIntegrationTest;
 import org.junit.jupiter.api.Test;

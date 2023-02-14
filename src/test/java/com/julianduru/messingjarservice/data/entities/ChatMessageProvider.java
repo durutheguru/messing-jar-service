@@ -1,5 +1,6 @@
-package com.julianduru.messingjarservice.data;
+package com.julianduru.messingjarservice.data.entities;
 
+import com.julianduru.messingjarservice.data.MongoDataProvider;
 import com.julianduru.messingjarservice.entities.ChatMessage;
 import com.julianduru.messingjarservice.modules.chat.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;

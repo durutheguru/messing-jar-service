@@ -41,7 +41,7 @@ public interface MongoDataProvider<T> extends DataProvider<T> {
         var flux = Flux.<T>just();
 
         for(int i = 0; i < count; ++i) {
-            flux.mergeWith(this.save(sample));
+            flux = flux.mergeWith(this.save(sample));
         }
 
         return flux;

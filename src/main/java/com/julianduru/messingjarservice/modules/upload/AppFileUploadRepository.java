@@ -5,6 +5,7 @@ import com.julianduru.fileuploader.repositories.FileUploadRepository;
 import com.julianduru.messingjarservice.util.ReactiveBlocker;
 import com.julianduru.messingjarservice.util.ReactiveListBlocker;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,6 +20,7 @@ import java.util.Optional;
 /**
  * created by julian on 20/11/2022
  */
+@Slf4j
 @Component
 @Primary
 @RequiredArgsConstructor
@@ -58,12 +60,17 @@ public class AppFileUploadRepository implements FileUploadRepository {
 
     @Override
     public Optional<FileUpload> findByReference(String reference) {
-        return Optional.ofNullable(
-            new ReactiveBlocker<>(
+        try {
+            return Optional.ofNullable(
                 messingJarFileUploadRepository.findByReference(reference)
-                    .map(com.julianduru.messingjarservice.entities.FileUpload::toApi)
-            ).getValue()
-        );
+                .map(com.julianduru.messingjarservice.entities.FileUpload::toApi)
+                .toFuture().join()
+            );
+        }
+        catch (Exception e) {
+            log.warn(e.getMessage(), e);
+            return Optional.empty();
+        }
     }
 
 

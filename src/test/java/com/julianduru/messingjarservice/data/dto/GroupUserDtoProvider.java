@@ -1,5 +1,7 @@
-package com.julianduru.messingjarservice.data;
+package com.julianduru.messingjarservice.data.dto;
 
+import com.julianduru.messingjarservice.data.entities.GroupDataProvider;
+import com.julianduru.messingjarservice.data.entities.UserDataProvider;
 import com.julianduru.messingjarservice.modules.group.dto.GroupUserDto;
 import com.julianduru.util.test.DataProvider;
 import lombok.RequiredArgsConstructor;

@@ -1,0 +1,10 @@
+
+type GroupChatPreview {
+
+    groupName: String
+    lastMessage: String
+    lastMessageTimeStamp: String
+    groupImageUrl: String
+
+}
+
