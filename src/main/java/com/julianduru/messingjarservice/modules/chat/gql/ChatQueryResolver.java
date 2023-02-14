@@ -1,4 +1,4 @@
-package com.julianduru.messingjarservice.graphql.chats;
+package com.julianduru.messingjarservice.modules.chat.gql;
 
 import com.julianduru.messingjarservice.modules.chat.ChatService;
 import com.julianduru.messingjarservice.modules.chat.dto.ChatPreviewDto;
@@ -22,7 +22,7 @@ public class ChatQueryResolver {
 
 
     @QueryMapping
-    public List<ChatPreviewDto> fetchChatPreviews(@Argument int page, @Argument int size) {
+    public List<ChatPreviewDto> fetchChatPreviews(@Argument int page, @Argument int size) throws Exception {
         return chatService.fetchChatPreviews(page, size);
     }
 

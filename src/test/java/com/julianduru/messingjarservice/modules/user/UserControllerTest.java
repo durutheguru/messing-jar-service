@@ -3,8 +3,6 @@ package com.julianduru.messingjarservice.modules.user;
 import com.julianduru.messingjarservice.data.UserDataUpdateProvider;
 import com.julianduru.messingjarservice.data.UserDtoProvider;
 import com.julianduru.messingjarservice.modules.BaseControllerTest;
-import com.julianduru.messingjarservice.repositories.SettingsRepository;
-import com.julianduru.messingjarservice.repositories.UserRepository;
 import com.julianduru.util.JSONUtil;
 import graphql.kickstart.spring.webclient.boot.GraphQLRequest;
 import graphql.kickstart.spring.webclient.boot.GraphQLWebClient;

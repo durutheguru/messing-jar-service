@@ -1,7 +1,7 @@
 package com.julianduru.messingjarservice.data;
 
 import com.julianduru.messingjarservice.entities.Chat;
-import com.julianduru.messingjarservice.repositories.ChatRepository;
+import com.julianduru.messingjarservice.modules.chat.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;

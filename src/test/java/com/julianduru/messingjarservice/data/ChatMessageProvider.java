@@ -1,13 +1,11 @@
 package com.julianduru.messingjarservice.data;
 
 import com.julianduru.messingjarservice.entities.ChatMessage;
-import com.julianduru.messingjarservice.repositories.ChatMessageRepository;
+import com.julianduru.messingjarservice.modules.chat.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 /**
  * created by julian on 25/01/2023

@@ -1,6 +1,7 @@
-package com.julianduru.messingjarservice.repositories;
+package com.julianduru.messingjarservice.modules.group;
 
 import com.julianduru.messingjarservice.entities.Group;
+import com.julianduru.messingjarservice.BaseEntityRepository;
 import org.springframework.stereotype.Repository;
 
 /**

@@ -1,6 +1,7 @@
-package com.julianduru.messingjarservice.repositories;
+package com.julianduru.messingjarservice.modules.chat;
 
 import com.julianduru.messingjarservice.entities.Chat;
+import com.julianduru.messingjarservice.BaseEntityRepository;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;

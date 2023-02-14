@@ -1,14 +1,10 @@
 package com.julianduru.messingjarservice.data;
 
-import com.julianduru.messingjarservice.dto.GroupUserDto;
+import com.julianduru.messingjarservice.modules.group.dto.GroupUserDto;
 import com.julianduru.util.test.DataProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.CompletableFuture;
 
 /**
  * created by julian on 10/02/2023

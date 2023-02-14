@@ -1,8 +1,8 @@
 package com.julianduru.messingjarservice.modules.group;
 
 import com.julianduru.messingjarservice.ServiceConstants;
-import com.julianduru.messingjarservice.dto.GroupDto;
-import com.julianduru.messingjarservice.dto.GroupUserDto;
+import com.julianduru.messingjarservice.modules.group.dto.GroupDto;
+import com.julianduru.messingjarservice.modules.group.dto.GroupUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.concurrent.ExecutionException;
 
 /**
  * created by julian on 10/02/2023
@@ -28,7 +29,7 @@ public class GroupController {
 
 
     @PostMapping
-    public Mono<GroupDto> saveGroup(@Valid @RequestBody GroupDto groupDto) {
+    public Mono<GroupDto> saveGroup(@Valid @RequestBody GroupDto groupDto) throws ExecutionException, InterruptedException {
         return groupService.saveGroup(groupDto).map(GroupDto::fromEntity);
     }
 

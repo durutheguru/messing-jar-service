@@ -1,8 +1,8 @@
-package com.julianduru.messingjarservice.dto;
+package com.julianduru.messingjarservice.modules.group.dto;
 
+import com.julianduru.messingjarservice.dto.BaseDto;
 import com.julianduru.messingjarservice.entities.GroupUser;
 import lombok.Data;
-import org.bson.types.ObjectId;
 
 import javax.validation.constraints.NotNull;
 

@@ -1,12 +1,11 @@
 package com.julianduru.messingjarservice.modules.user.components;
 
 import com.julianduru.fileuploader.repositories.FileUploadRepository;
-import com.julianduru.messingjarservice.dto.UserDto;
+import com.julianduru.messingjarservice.modules.user.dto.UserDto;
 import com.julianduru.messingjarservice.entities.Settings;
 import com.julianduru.messingjarservice.modules.user.dto.OAuthUserData;
 import com.julianduru.messingjarservice.modules.user.dto.UserDataDto;
-import com.julianduru.messingjarservice.repositories.MessingJarFileUploadRepository;
-import com.julianduru.messingjarservice.repositories.SettingsRepository;
+import com.julianduru.messingjarservice.modules.user.SettingsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

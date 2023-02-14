@@ -3,8 +3,6 @@ package com.julianduru.messingjarservice.modules.group;
 import com.julianduru.messingjarservice.data.GroupDtoProvider;
 import com.julianduru.messingjarservice.data.GroupUserDtoProvider;
 import com.julianduru.messingjarservice.modules.BaseControllerTest;
-import com.julianduru.messingjarservice.repositories.GroupRepository;
-import com.julianduru.messingjarservice.repositories.GroupUserRepository;
 import com.julianduru.util.JSONUtil;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;

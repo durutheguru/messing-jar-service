@@ -6,7 +6,6 @@ import com.julianduru.fileuploader.Upload;
 import com.julianduru.fileuploader.UploadRequest;
 import com.julianduru.fileuploader.providers.aws.AWSConfig;
 import com.julianduru.messingjarservice.BaseIntegrationTest;
-import com.julianduru.messingjarservice.repositories.MessingJarFileUploadRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

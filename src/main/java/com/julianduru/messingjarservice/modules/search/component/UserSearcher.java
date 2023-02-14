@@ -3,21 +3,16 @@ package com.julianduru.messingjarservice.modules.search.component;
 import com.julianduru.fileuploader.api.FileUpload;
 import com.julianduru.fileuploader.repositories.FileUploadRepository;
 import com.julianduru.messingjarservice.modules.search.dto.OAuthUserSearchResultsPageType;
-import com.julianduru.messingjarservice.modules.search.dto.ParameterizedPageType;
 import com.julianduru.messingjarservice.modules.search.dto.UserSearchResult;
-import com.julianduru.messingjarservice.modules.user.dto.OAuthUserData;
-import com.julianduru.messingjarservice.repositories.UserRepository;
+import com.julianduru.messingjarservice.modules.user.UserRepository;
 import com.julianduru.messingjarservice.util.ReactiveBlocker;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**

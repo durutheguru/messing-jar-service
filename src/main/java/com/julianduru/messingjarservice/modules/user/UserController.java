@@ -1,7 +1,7 @@
 package com.julianduru.messingjarservice.modules.user;
 
 import com.julianduru.messingjarservice.ServiceConstants;
-import com.julianduru.messingjarservice.dto.UserDto;
+import com.julianduru.messingjarservice.modules.user.dto.UserDto;
 import com.julianduru.messingjarservice.modules.user.dto.UserDataDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

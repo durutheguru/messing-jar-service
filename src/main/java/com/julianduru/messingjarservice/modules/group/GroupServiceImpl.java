@@ -1,17 +1,25 @@
 package com.julianduru.messingjarservice.modules.group;
 
-import com.julianduru.messingjarservice.dto.GroupDto;
-import com.julianduru.messingjarservice.dto.GroupUserDto;
+import com.julianduru.fileuploader.repositories.FileUploadRepository;
+import com.julianduru.messingjarservice.modules.group.dto.GroupDto;
+import com.julianduru.messingjarservice.modules.group.dto.GroupUserDto;
 import com.julianduru.messingjarservice.entities.Group;
 import com.julianduru.messingjarservice.entities.GroupUser;
-import com.julianduru.messingjarservice.repositories.GroupRepository;
-import com.julianduru.messingjarservice.repositories.GroupUserRepository;
-import com.julianduru.messingjarservice.repositories.UserRepository;
+import com.julianduru.messingjarservice.entities.User;
+import com.julianduru.messingjarservice.modules.group.dto.GroupPreviewDto;
+import com.julianduru.messingjarservice.modules.user.UserRepository;
+import com.julianduru.messingjarservice.util.AuthUtil;
+import com.julianduru.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * created by julian on 10/02/2023
@@ -30,10 +38,33 @@ public class GroupServiceImpl implements GroupService {
     private final GroupUserRepository groupUserRepository;
 
 
+    private final GroupMessageRepository groupMessageRepository;
+
+
+    private final FileUploadRepository fileUploadRepository;
+
+
 
     @Override
-    public Mono<Group> saveGroup(GroupDto groupDto) {
-        return groupRepository.save(groupDto.toEntity());
+    public Mono<Group> saveGroup(GroupDto groupDto) throws ExecutionException, InterruptedException {
+        var auth = AuthUtil.authR();
+        String username = ((User)auth.toFuture().get().getPrincipal()).getUsername();
+
+        return userRepository.findByUsername(username)
+            .switchIfEmpty(
+                Mono.error(
+                    new RuntimeException(String.format("User %s not found", username))
+                )
+            )
+            .flatMap(user -> groupRepository.save(
+                groupDto.toEntity().ownerUserId(user.getId())
+            ));
+    }
+
+
+    @Override
+    public Flux<Group> findGroups() {
+        return groupRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
 
 
@@ -63,7 +94,67 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Flux<GroupUser> findGroupUsers(String groupId) {
-        return null;
+        return groupUserRepository.findGroupUsersByGroupId(new ObjectId(groupId));
+    }
+
+
+    @Override
+    public Flux<Group> findUserGroups(ObjectId userId) {
+        // TODO: fix this bad code.
+        return groupUserRepository.findGroupUsersByUserId(userId)
+            .flatMap(groupUser -> groupRepository.findById(groupUser.getGroupId()));
+    }
+
+
+    @Override
+    public List<GroupPreviewDto> fetchGroupPreviews(int page, int size) throws ExecutionException, InterruptedException {
+        return AuthUtil.authUser(userRepository)
+            .switchIfEmpty(
+                Mono.error(new RuntimeException("User not found"))
+            )
+            .flux()
+            .map(
+                user -> {
+                    try {
+                        var groups = findUserGroups(user.getId()).collectList().toFuture().get()
+                            .stream()
+                            .sorted((g1, g2) -> g2.getLastMessageTimestamp() != null && g1.getLastMessageTimestamp() != null ?
+                                g2.getLastMessageTimestamp().compareTo(g1.getLastMessageTimestamp()) : g2.getName().compareTo(g1.getName()))
+                            .limit(5)
+                            .toList();
+
+                        var groupIds = groups.stream().map(Group::getId).toList();
+                        return groupMessageRepository
+                            .findByGroupIdInOrderByCreatedDateDesc(
+                                groupIds, PageRequest.of(0, 1)
+                            )
+                            .map(
+                                groupMessage -> {
+                                    var group = groups.stream().filter(g -> g.getId().equals(groupMessage.getGroupId())).findFirst().get();
+                                    var groupPreviewDto = new GroupPreviewDto();
+
+                                    groupPreviewDto.setGroupName(group.getName());
+                                    groupPreviewDto.setLastMessage(groupMessage.getMessage());
+
+                                    if (group.getLastMessageTimestamp() != null) {
+                                        groupPreviewDto.setLastMessageTimeStamp(
+                                            TimeUtil.formatDateTime(group.getLastMessageTimestamp().toLocalDateTime())
+                                        );
+                                    }
+
+                                    var fileUpload = fileUploadRepository.findByReference(group.getIconImageRef());
+                                    fileUpload.ifPresent(upload -> groupPreviewDto.setGroupImageUrl(upload.getPublicUrl()));
+
+                                    return groupPreviewDto;
+                                }
+                            );
+                    }
+                    catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            ).cast(GroupPreviewDto.class)
+            .collectList().toFuture().get();
     }
 
 

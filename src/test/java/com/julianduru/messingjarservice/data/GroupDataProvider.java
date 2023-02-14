@@ -1,7 +1,7 @@
 package com.julianduru.messingjarservice.data;
 
 import com.julianduru.messingjarservice.entities.Group;
-import com.julianduru.messingjarservice.repositories.GroupRepository;
+import com.julianduru.messingjarservice.modules.group.GroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;

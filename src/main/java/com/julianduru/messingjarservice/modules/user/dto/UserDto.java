@@ -1,5 +1,6 @@
-package com.julianduru.messingjarservice.dto;
+package com.julianduru.messingjarservice.modules.user.dto;
 
+import com.julianduru.messingjarservice.dto.BaseDto;
 import com.julianduru.messingjarservice.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

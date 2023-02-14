@@ -1,6 +1,7 @@
-package com.julianduru.messingjarservice.repositories;
+package com.julianduru.messingjarservice.modules.user;
 
 import com.julianduru.messingjarservice.entities.User;
+import com.julianduru.messingjarservice.BaseEntityRepository;
 import com.julianduru.messingjarservice.util.ReactiveBlocker;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;

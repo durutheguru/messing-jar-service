@@ -1,4 +1,4 @@
-package com.julianduru.messingjarservice.repositories;
+package com.julianduru.messingjarservice;
 
 import com.julianduru.messingjarservice.entities.BaseEntity;
 import org.bson.types.ObjectId;

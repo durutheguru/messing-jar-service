@@ -3,6 +3,7 @@ package com.julianduru.messingjarservice.modules.chat;
 import com.julianduru.messingjarservice.modules.chat.dto.ChatPreviewDto;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * created by julian on 05/02/2023
@@ -10,7 +11,7 @@ import java.util.List;
 public interface ChatService {
 
 
-    List<ChatPreviewDto> fetchChatPreviews(int page, int size);
+    List<ChatPreviewDto> fetchChatPreviews(int page, int size) throws ExecutionException, InterruptedException;
 
 
 }

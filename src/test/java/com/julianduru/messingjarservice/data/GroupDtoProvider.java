@@ -1,6 +1,6 @@
 package com.julianduru.messingjarservice.data;
 
-import com.julianduru.messingjarservice.dto.GroupDto;
+import com.julianduru.messingjarservice.modules.group.dto.GroupDto;
 import com.julianduru.util.test.DataProvider;
 import org.springframework.stereotype.Component;
 

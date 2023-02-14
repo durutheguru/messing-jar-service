@@ -1,8 +1,8 @@
 package com.julianduru.messingjarservice.modules.user.components;
 
-import com.julianduru.messingjarservice.dto.UserDto;
+import com.julianduru.messingjarservice.modules.user.dto.UserDto;
 import com.julianduru.messingjarservice.entities.User;
-import com.julianduru.messingjarservice.repositories.UserRepository;
+import com.julianduru.messingjarservice.modules.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
 package com.julianduru.messingjarservice.data;
 
 import com.julianduru.messingjarservice.entities.User;
-import com.julianduru.messingjarservice.repositories.UserRepository;
+import com.julianduru.messingjarservice.modules.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
