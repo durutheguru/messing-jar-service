@@ -32,11 +32,9 @@ public class AppFileUploadRepository implements FileUploadRepository {
 
     @Override
     public FileUpload save(FileUpload upload) {
-        var savedUpload = new ReactiveBlocker<>(
-            messingJarFileUploadRepository.save(
+        var savedUpload = messingJarFileUploadRepository.save(
                 com.julianduru.messingjarservice.entities.FileUpload.from(upload)
-            )
-        ).getValue();
+            ).toFuture().join();
 
         if (savedUpload != null) {
             return savedUpload.toApi();

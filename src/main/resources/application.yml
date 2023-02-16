@@ -70,12 +70,9 @@ graphql:
 
 logging:
     level:
-        reactor:
-            netty:
-                http:
-                    client:
-                        HttpClient: DEBUG
-
+        reactor.netty.http.client.HttpClient: DEBUG
+        org.apache.kafka.clients.NetworkClient: ERROR
+        org.springframework.security: DEBUG
 
 mongock:
  change-logs-scan-package:

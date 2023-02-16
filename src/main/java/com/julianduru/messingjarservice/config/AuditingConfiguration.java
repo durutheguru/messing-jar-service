@@ -1,6 +1,5 @@
 package com.julianduru.messingjarservice.config;
 
-import com.julianduru.messingjarservice.util.AuthUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.auditing.DateTimeProvider;
@@ -10,7 +9,6 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.config.EnableReactiveMongoAuditing;
 import reactor.core.publisher.Mono;
 
-import java.security.Principal;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
@@ -27,14 +25,7 @@ public class AuditingConfiguration {
 
     @Bean
     public ReactiveAuditorAware<String> auditorProvider() {
-        return () -> {
-            try {
-                return AuthUtil.authR().map(Principal::getName);
-            }
-            catch (Exception e) {
-                return Mono.empty();
-            }
-        };
+        return () -> Mono.just("user");
     }
 
 

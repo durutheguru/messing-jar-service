@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.scheduler.Schedulers;
@@ -19,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.security.Principal;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -48,7 +50,7 @@ public class FileUploadController {
 
     @PostMapping( consumes = { MediaType.MULTIPART_FORM_DATA_VALUE } )
     @ResponseBody
-    public FileData uploadFile(@RequestPart("file") FilePart filePart) throws IOException {
+    public FileData uploadFile(@AuthenticationPrincipal Principal principal, @RequestPart("file") FilePart filePart) throws IOException {
         var fileRead = new AtomicBoolean(false);
         var bout = new ByteArrayOutputStream();
         filePart.content()

@@ -18,7 +18,8 @@ public class AuthUtil {
 
     public static Mono<Authentication> authR() {
         return ReactiveSecurityContextHolder.getContext()
-            .map(SecurityContext::getAuthentication);
+            .map(SecurityContext::getAuthentication)
+            .switchIfEmpty(Mono.error(new SecurityException("No authentication found")));
     }
 
 

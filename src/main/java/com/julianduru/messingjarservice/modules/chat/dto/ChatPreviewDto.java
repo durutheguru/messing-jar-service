@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChatPreviewDto {
 
+    private String chatId;
+
     private String fullName;
 
     private String lastMessage;

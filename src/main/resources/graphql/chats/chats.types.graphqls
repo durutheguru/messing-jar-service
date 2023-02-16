@@ -2,6 +2,7 @@
 
 type ChatPreview {
 
+    chatId: String
     fullName: String
     profilePictureUrl: String
     lastMessage: String

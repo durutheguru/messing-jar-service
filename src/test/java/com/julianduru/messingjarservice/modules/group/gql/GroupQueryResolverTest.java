@@ -95,6 +95,7 @@ public class GroupQueryResolverTest extends BaseIntegrationTest {
                 """
                 {
                     fetchGroupPreviews {
+                        groupId
                         groupName
                         lastMessage
                         lastMessageTimeStamp

@@ -34,6 +34,7 @@ public class ChatQueryResolverTest extends BaseIntegrationTest {
                 """
                 {
                     fetchChatPreviews {
+                        chatId
                         fullName
                         lastMessage
                         lastMessageTimeStamp

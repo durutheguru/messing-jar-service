@@ -75,6 +75,7 @@ public class ChatServiceImpl implements ChatService {
 
                         previews.add(
                             ChatPreviewDto.builder()
+                                .chatId(chat.getId() != null ? chat.getId().toString(): "")
                                 .fullName(otherUserDetails.getFullName())
                                 .lastMessage(lastMessage != null ? lastMessage.getMessage() : "")
                                 .lastMessageTimeStamp(TimeUtil.formatDateTime(chat.getLastMessageTime()))

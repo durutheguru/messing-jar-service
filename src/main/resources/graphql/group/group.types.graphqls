@@ -1,6 +1,7 @@
 
 type GroupChatPreview {
 
+    groupId: String
     groupName: String
     lastMessage: String
     lastMessageTimeStamp: String

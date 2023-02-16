@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -46,9 +47,8 @@ public class GroupServiceImpl implements GroupService {
 
 
     @Override
-    public Mono<Group> saveGroup(GroupDto groupDto) throws ExecutionException, InterruptedException {
-        var auth = AuthUtil.authR();
-        String username = ((User)auth.toFuture().get().getPrincipal()).getUsername();
+    public Mono<Group> saveGroup(Principal principal, GroupDto groupDto) throws ExecutionException, InterruptedException {
+        var username = principal.getName();
 
         return userRepository.findByUsername(username)
             .switchIfEmpty(
@@ -132,6 +132,7 @@ public class GroupServiceImpl implements GroupService {
                                     var group = groups.stream().filter(g -> g.getId().equals(groupMessage.getGroupId())).findFirst().get();
                                     var groupPreviewDto = new GroupPreviewDto();
 
+                                    groupPreviewDto.setGroupId(group.getId() != null ? group.getId().toString() : "");
                                     groupPreviewDto.setGroupName(group.getName());
                                     groupPreviewDto.setLastMessage(groupMessage.getMessage());
 

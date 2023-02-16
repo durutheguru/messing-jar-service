@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -18,7 +19,7 @@ import java.util.concurrent.ExecutionException;
 public interface GroupService {
 
 
-    Mono<Group> saveGroup(GroupDto groupDto) throws ExecutionException, InterruptedException;
+    Mono<Group> saveGroup(Principal principal, GroupDto groupDto) throws ExecutionException, InterruptedException;
 
 
     Flux<Group> findGroups();
