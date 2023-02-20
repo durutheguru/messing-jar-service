@@ -1,15 +1,16 @@
 package com.julianduru.messingjarservice.modules.group;
 
 import com.julianduru.fileuploader.repositories.FileUploadRepository;
-import com.julianduru.messingjarservice.modules.group.dto.GroupDto;
-import com.julianduru.messingjarservice.modules.group.dto.GroupUserDto;
+import com.julianduru.messingjarservice.entities.GroupMessage;
+import com.julianduru.messingjarservice.modules.group.dto.*;
 import com.julianduru.messingjarservice.entities.Group;
 import com.julianduru.messingjarservice.entities.GroupUser;
 import com.julianduru.messingjarservice.entities.User;
-import com.julianduru.messingjarservice.modules.group.dto.GroupPreviewDto;
 import com.julianduru.messingjarservice.modules.user.UserRepository;
+import com.julianduru.messingjarservice.modules.user.UserService;
 import com.julianduru.messingjarservice.util.AuthUtil;
 import com.julianduru.util.TimeUtil;
+import com.julianduru.util.exception.RuntimeServiceException;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import reactor.core.publisher.Mono;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -43,6 +45,9 @@ public class GroupServiceImpl implements GroupService {
 
 
     private final FileUploadRepository fileUploadRepository;
+
+
+    private final UserService userService;
 
 
 
@@ -107,8 +112,8 @@ public class GroupServiceImpl implements GroupService {
 
 
     @Override
-    public List<GroupPreviewDto> fetchGroupPreviews(int page, int size) throws ExecutionException, InterruptedException {
-        return AuthUtil.authUser(userRepository)
+    public List<GroupPreviewDto> fetchGroupPreviews(String username, int page, int size) throws ExecutionException, InterruptedException {
+        return userRepository.findByUsername(username)
             .switchIfEmpty(
                 Mono.error(new RuntimeException("User not found"))
             )
@@ -125,16 +130,25 @@ public class GroupServiceImpl implements GroupService {
 
                         var groupIds = groups.stream().map(Group::getId).toList();
                         return groupIds.stream()
-                            .map(groupMessageRepository::findFirstByGroupIdOrderByCreatedDateDesc)
+                            .map(id -> {
+                                var groupMessage = groupMessageRepository
+                                    .findFirstByGroupIdOrderByCreatedDateDesc(id)
+                                    .toFuture().join();
+                                return new Object[]{id, groupMessage};
+                            })
                             .map(
-                                groupMessageMono -> {
-                                    var groupMessage = groupMessageMono.toFuture().join();
-                                    var group = groups.stream().filter(g -> g.getId().equals(groupMessage.getGroupId())).findFirst().get();
+                                objects -> {
+                                    var groupId = (ObjectId) objects[0];
+                                    var groupMessage = (GroupMessage) objects[1];
+                                    var group = groups.stream().filter(g -> g.getId().equals(groupId)).findFirst().get();
                                     var groupPreviewDto = new GroupPreviewDto();
 
                                     groupPreviewDto.setGroupId(group.getId() != null ? group.getId().toString() : "");
                                     groupPreviewDto.setGroupName(group.getName());
-                                    groupPreviewDto.setLastMessage(groupMessage.getMessage());
+
+                                    if (groupMessage != null) {
+                                        groupPreviewDto.setLastMessage(groupMessage.getMessage());
+                                    }
 
                                     if (group.getLastMessageTimestamp() != null) {
                                         groupPreviewDto.setLastMessageTimeStamp(
@@ -158,6 +172,46 @@ public class GroupServiceImpl implements GroupService {
             .stream()
             .flatMap(List::stream)
             .toList();
+    }
+
+
+    @Override
+    public GroupDetailsDto fetchGroupDetails(String groupId) throws ExecutionException, InterruptedException {
+        var group = groupRepository.findById(new ObjectId(groupId)).toFuture().join();
+        if (group == null) {
+            throw new RuntimeServiceException(
+                String.format("Group with id %s not found", groupId)
+            );
+        }
+
+        var memberCount = groupUserRepository.countByGroupId(new ObjectId(groupId)).toFuture().join();
+        return GroupDetailsDto.builder()
+            .id(group.getId() != null ? group.getId().toString() : "")
+            .name(group.getName())
+            .memberCount(memberCount.intValue())
+            .build();
+    }
+
+
+    @Override
+    public Flux<GroupUserPreviewDto> fetchGroupUsers(String groupId) {
+        return groupUserRepository.findGroupUsersByGroupId(
+                new ObjectId(groupId)
+            )
+            .flatMap(
+                groupUser -> userRepository.findById(groupUser.getUserId())
+                    .map(
+                        user -> {
+                            var details = userService.fetchUserDetails(user.getUsername())
+                                .toFuture().join();
+                            return new GroupUserPreviewDto(
+                                groupUser.getGroupId().toString(),
+                                user.getUsername(),
+                                details != null ? details.getProfilePhotoPublicUrl() : null
+                            );
+                        }
+                    )
+            );
     }
 
 

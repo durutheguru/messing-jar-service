@@ -4,5 +4,9 @@ extend type Query {
 
     fetchGroupPreviews(page: Int = 0, size: Int = 5): [GroupChatPreview]
 
+    fetchGroupDetails(groupId: String!): GroupChatDetails
+
+    fetchGroupMembers(groupId: String!): [GroupUserPreview]
+
 
 }

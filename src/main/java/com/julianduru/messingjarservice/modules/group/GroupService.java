@@ -1,10 +1,8 @@
 package com.julianduru.messingjarservice.modules.group;
 
-import com.julianduru.messingjarservice.modules.group.dto.GroupDto;
-import com.julianduru.messingjarservice.modules.group.dto.GroupUserDto;
+import com.julianduru.messingjarservice.modules.group.dto.*;
 import com.julianduru.messingjarservice.entities.Group;
 import com.julianduru.messingjarservice.entities.GroupUser;
-import com.julianduru.messingjarservice.modules.group.dto.GroupPreviewDto;
 import org.bson.types.ObjectId;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -34,7 +32,13 @@ public interface GroupService {
     Flux<Group> findUserGroups(ObjectId userId);
 
 
-    List<GroupPreviewDto> fetchGroupPreviews(int page, int size) throws ExecutionException, InterruptedException;
+    List<GroupPreviewDto> fetchGroupPreviews(String username, int page, int size) throws ExecutionException, InterruptedException;
+
+
+    GroupDetailsDto fetchGroupDetails(String groupId) throws ExecutionException, InterruptedException;
+
+
+    Flux<GroupUserPreviewDto> fetchGroupUsers(String groupId);
 
 
 }

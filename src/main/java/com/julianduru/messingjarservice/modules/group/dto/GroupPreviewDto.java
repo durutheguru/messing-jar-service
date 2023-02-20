@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GroupPreviewDto {
 
+
     private String groupId;
 
     private String groupName;

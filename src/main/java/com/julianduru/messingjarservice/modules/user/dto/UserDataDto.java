@@ -12,6 +12,10 @@ import javax.validation.constraints.Size;
 public class UserDataDto {
 
 
+    @NotEmpty(message = "Username is required")
+    private String username;
+
+
     @NotEmpty(message = "First Name is required")
     @Size(max = 50, message = "First Name should not exceed {max}")
     private String firstName;

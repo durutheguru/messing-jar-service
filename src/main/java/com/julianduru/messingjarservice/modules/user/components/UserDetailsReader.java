@@ -58,6 +58,7 @@ public class UserDetailsReader {
 
                 var dto = new UserDataDto();
 
+                dto.setUsername(oauthUserData.getUsername());
                 dto.setEmail(oauthUserData.getEmail());
                 dto.setFirstName(oauthUserData.getFirstName());
                 dto.setLastName(oauthUserData.getLastName());

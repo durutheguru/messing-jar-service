@@ -40,14 +40,8 @@ public class ChatServiceImpl implements ChatService {
 
 
     @Override
-    public List<ChatPreviewDto> fetchChatPreviews(int page, int size) throws ExecutionException, InterruptedException {
-        return AuthUtil.authR()
-            .flatMap(
-                authentication -> {
-                    var username = ((User)authentication.getPrincipal()).getUsername();
-                    return userRepository.findByUsername(username);
-                }
-            )
+    public List<ChatPreviewDto> fetchChatPreviews(String username, int page, int size) throws ExecutionException, InterruptedException {
+        return userRepository.findByUsername(username)
             .switchIfEmpty(Mono.error(new RuntimeException("User not found")))
             .map(
                 user -> {
@@ -64,7 +58,7 @@ public class ChatServiceImpl implements ChatService {
                     var chatList= new ReactiveListBlocker<>(chats).getValue();
                     for (Chat chat : chatList) {
                         var otherUser = chat.getUser1().equals(user.getId()) ? chat.getUser2() : chat.getUser1();
-                        var otherUserDetails = new ReactiveBlocker<>(userService.fetchUserDetails(otherUser)).getValue();
+                        var otherUserDetails = userService.fetchUserDetails(otherUser).toFuture().join();
 
                         if (otherUserDetails == null) {
                             continue;
@@ -76,6 +70,7 @@ public class ChatServiceImpl implements ChatService {
                         previews.add(
                             ChatPreviewDto.builder()
                                 .chatId(chat.getId() != null ? chat.getId().toString(): "")
+                                .username(otherUserDetails.getUsername())
                                 .fullName(otherUserDetails.getFullName())
                                 .lastMessage(lastMessage != null ? lastMessage.getMessage() : "")
                                 .lastMessageTimeStamp(TimeUtil.formatDateTime(chat.getLastMessageTime()))

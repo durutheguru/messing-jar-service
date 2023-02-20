@@ -5,8 +5,10 @@ import com.julianduru.messingjarservice.modules.chat.dto.ChatPreviewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 
+import java.security.Principal;
 import java.util.List;
 
 
@@ -22,8 +24,10 @@ public class ChatQueryResolver {
 
 
     @QueryMapping
-    public List<ChatPreviewDto> fetchChatPreviews(@Argument int page, @Argument int size) throws Exception {
-        return chatService.fetchChatPreviews(page, size);
+    public List<ChatPreviewDto> fetchChatPreviews(
+        @AuthenticationPrincipal Principal principal, @Argument int page, @Argument int size
+    ) throws Exception {
+        return chatService.fetchChatPreviews(principal.getName(), page, size);
     }
 
 

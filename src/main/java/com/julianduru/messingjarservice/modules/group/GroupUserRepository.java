@@ -3,6 +3,7 @@ package com.julianduru.messingjarservice.modules.group;
 import com.julianduru.messingjarservice.entities.GroupUser;
 import com.julianduru.messingjarservice.BaseEntityRepository;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,7 +21,14 @@ public interface GroupUserRepository extends BaseEntityRepository<GroupUser> {
     Flux<GroupUser> findGroupUsersByGroupId(ObjectId groupId);
 
 
+    Flux<GroupUser> findGroupUsersByGroupId(ObjectId groupId, Pageable pageable);
+
+
     Flux<GroupUser> findGroupUsersByUserId(ObjectId userId);
+
+
+    Mono<Long> countByGroupId(ObjectId groupId);
+
 
 
 }

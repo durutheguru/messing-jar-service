@@ -16,6 +16,8 @@ public class ChatPreviewDto {
 
     private String chatId;
 
+    private String username;
+
     private String fullName;
 
     private String lastMessage;

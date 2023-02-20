@@ -20,7 +20,7 @@ public class FetchChatPreviewsTest extends BaseIntegrationTest {
 
     @Test
     public void fetchChatPreviews() throws Exception {
-        var previews = chatService.fetchChatPreviews(0, 5);
+        var previews = chatService.fetchChatPreviews("remilekun", 0, 5);
         assertThat(previews).isNotEmpty();
     }
 

@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
 public interface ChatService {
 
 
-    List<ChatPreviewDto> fetchChatPreviews(int page, int size) throws ExecutionException, InterruptedException;
+    List<ChatPreviewDto> fetchChatPreviews(String username, int page, int size) throws ExecutionException, InterruptedException;
 
 
 }

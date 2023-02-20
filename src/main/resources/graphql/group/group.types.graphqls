@@ -9,3 +9,15 @@ type GroupChatPreview {
 
 }
 
+type GroupChatDetails {
+    id: String
+    name: String
+    memberCount: Int
+}
+
+type GroupUserPreview {
+    groupId: String
+    username: String
+    imageUrl: String
+}
+
