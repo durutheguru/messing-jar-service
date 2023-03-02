@@ -207,6 +207,7 @@ public class GroupServiceImpl implements GroupService {
                             return new GroupUserPreviewDto(
                                 groupUser.getGroupId().toString(),
                                 user.getUsername(),
+                                details != null? details.getFullName() : null,
                                 details != null ? details.getProfilePhotoPublicUrl() : null
                             );
                         }

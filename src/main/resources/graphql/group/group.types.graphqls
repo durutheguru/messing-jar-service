@@ -18,6 +18,7 @@ type GroupChatDetails {
 type GroupUserPreview {
     groupId: String
     username: String
+    fullName: String
     imageUrl: String
 }
 

@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserSearchResult {
 
+    
+    private String userId;
+
 
     private String username;
 

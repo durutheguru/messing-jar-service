@@ -26,7 +26,7 @@ public class SearchServiceImpl implements SearchService {
         var userSearchResults = userSearcher.searchUsers(query);
         return Mono.just(
             SearchResult.builder()
-                .userSearchResults(new ReactiveListBlocker<>(userSearchResults).getValue())
+                .userSearchResults(userSearchResults.collectList().toFuture().join())
                 .build()
         );
     }

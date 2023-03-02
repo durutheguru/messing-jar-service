@@ -78,6 +78,13 @@ mongock:
  change-logs-scan-package:
   - com.
 
+
+queue:
+    config:
+        message-write:
+            interval: "0 0/2 * 1/1 * ?"
+
+
 server:
     port: ${PORT:9190}
 

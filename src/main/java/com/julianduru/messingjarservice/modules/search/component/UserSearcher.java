@@ -90,6 +90,7 @@ public class UserSearcher {
                                             .profilePhotoUrl(
                                                 profileUpload != null ? profileUpload.getPublicUrl() : null
                                             )
+                                            .userId(u.hasId() ? u.getId().toString() : null)
                                             .build();
                                     }
                                 )

@@ -7,6 +7,8 @@ import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.core.LockProvider;
+import net.javacrumbs.shedlock.provider.mongo.reactivestreams.ReactiveStreamsMongoLockProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
@@ -65,6 +67,12 @@ public class DatabaseConfiguration extends AbstractReactiveMongoConfiguration {
     @Bean
     public ReactiveMongoTransactionManager reactiveMongoTransactionManager(ReactiveMongoDatabaseFactory dbFactory) {
         return new ReactiveMongoTransactionManager(dbFactory);
+    }
+
+
+    @Bean
+    public LockProvider lockProvider(MongoClient mongo) {
+        return new ReactiveStreamsMongoLockProvider(mongo.getDatabase(getDatabaseName()));
     }
 
 

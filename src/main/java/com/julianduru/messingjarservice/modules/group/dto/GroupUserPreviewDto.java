@@ -6,6 +6,7 @@ package com.julianduru.messingjarservice.modules.group.dto;
 public record GroupUserPreviewDto(
     String groupId,
     String username,
+    String fullName,
     String imageUrl
 ) {
 }

@@ -51,5 +51,9 @@ public class BaseEntity implements Persistable<ObjectId> {
     }
 
 
+    public boolean hasId() {
+        return getId() != null;
+    }
+
 
 }

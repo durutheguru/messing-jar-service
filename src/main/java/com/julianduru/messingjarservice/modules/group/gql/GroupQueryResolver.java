@@ -41,7 +41,7 @@ public class GroupQueryResolver {
 
 
     @QueryMapping
-    public List<GroupUserPreviewDto> fetchGroupUsers(
+    public List<GroupUserPreviewDto> fetchGroupMembers(
         @Argument String groupId
     ) throws Exception {
         return groupService.fetchGroupUsers(groupId).collectList().toFuture().join();
