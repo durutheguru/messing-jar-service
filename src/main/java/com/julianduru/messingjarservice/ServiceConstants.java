@@ -15,7 +15,11 @@ public interface ServiceConstants {
 
         String CHAT_HISTORY = "chat-history";
 
+        String GROUP_HISTORY = "group-history";
+
         String NEW_CHAT_MESSAGE = "new-chat-message";
+
+        String NEW_GROUP_MESSAGE = "new-group-message";
 
     }
 

@@ -16,7 +16,10 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Set;
 
 /**
  * created by julian on 27/08/2022
@@ -107,6 +110,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userId)
             .flatMap(user -> userDetailsReader.fetchUserDetails(user.getUsername()));
     }
+
+
+    @Override
+    public Flux<UserDataDto> fetchUserDetails(Set<String> usernames) {
+        return Flux.fromIterable(usernames)
+            .flatMap(userDetailsReader::fetchUserDetails);
+    }
+
 
 
 }

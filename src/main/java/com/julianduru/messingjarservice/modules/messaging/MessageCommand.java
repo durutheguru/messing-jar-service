@@ -32,6 +32,10 @@ public class MessageCommand {
 
         CHAT_MESSAGE,
 
+        INITIALIZE_GROUP,
+
+        GROUP_MESSAGE,
+
     }
 
 
