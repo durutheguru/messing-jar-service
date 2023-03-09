@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -41,6 +40,9 @@ public class QueueIncomingMessage extends BaseEntity {
     private OperationStatus processingStatus;
 
 
+    private boolean treatImmediately;
+
+
     public static QueueIncomingMessage from(IncomingMessage message) {
         var msg = QueueIncomingMessage.builder()
                 .reference(message.getReference())
@@ -49,6 +51,7 @@ public class QueueIncomingMessage extends BaseEntity {
                 .payload(message.getPayload())
                 .status(message.getStatus())
                 .processingStatus(message.getProcessingStatus())
+                .treatImmediately(message.isTreatImmediately())
                 .build();
 
         if (message.getId() != null) {
@@ -67,6 +70,7 @@ public class QueueIncomingMessage extends BaseEntity {
                 .payload(getPayload())
                 .status(getStatus())
                 .processingStatus(getProcessingStatus())
+                .treatImmediately(isTreatImmediately())
                 .build();
 
         if (getId() != null) {

@@ -58,10 +58,10 @@ public class KafkaMessageProducerConfiguration {
     }
 
 
-    @Bean
-    public NewTopic pushNotificationTopic() {
-        return new NewTopic(pushNotificationTopicName, 3, (short) 1);
-    }
+//    @Bean
+//    public NewTopic pushNotificationTopic() {
+//        return new NewTopic(pushNotificationTopicName, 3, (short) 1);
+//    }
 
 
 }

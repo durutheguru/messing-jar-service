@@ -3,9 +3,7 @@ package com.julianduru.messingjarservice.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.auditing.DateTimeProvider;
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.domain.ReactiveAuditorAware;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.config.EnableReactiveMongoAuditing;
 import reactor.core.publisher.Mono;
 
@@ -36,3 +34,4 @@ public class AuditingConfiguration {
 
 
 }
+

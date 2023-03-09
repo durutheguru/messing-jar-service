@@ -81,6 +81,8 @@ mongock:
 
 queue:
     config:
+        message-read:
+            interval: "0 0/2 * 1/1 * ?"
         message-write:
             interval: "0 0/2 * 1/1 * ?"
 
@@ -107,6 +109,11 @@ spring:
 
     main:
         web-application-type: REACTIVE
+
+    redis:
+        host: localhost
+        port: 6379
+        password: MyRedisPassword
 
     security:
         oauth2:

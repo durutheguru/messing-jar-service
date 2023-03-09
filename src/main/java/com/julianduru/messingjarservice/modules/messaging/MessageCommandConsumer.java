@@ -2,16 +2,16 @@ package com.julianduru.messingjarservice.modules.messaging;
 
 
 import com.julianduru.messingjarservice.util.ReactiveBlocker;
+import com.julianduru.queueintegrationlib.model.OperationStatus;
+import com.julianduru.queueintegrationlib.module.subscribe.annotation.Consumer;
 import com.julianduru.util.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
@@ -61,20 +61,16 @@ public class MessageCommandConsumer {
     }
 
 
-    @KafkaListener(
-        topics = {"user-command"},
-        groupId = "userCommandListenerGroup"
-    )
-    public void onMessage(ConsumerRecord<String, String> record) {
+    @Consumer(topic = "user-command")
+    public OperationStatus onMessage(String message) {
         try {
-            log.info("User Command Consumer Record: {}", record);
-
-            var value = record.value();
-            var command = JSONUtil.fromJsonString(value, MessageCommand.class);
-
+            log.info("User Command Received: {}", message);
+            var command = JSONUtil.fromJsonString(message, MessageCommand.class);
             handleCommand(command);
+            return OperationStatus.success();
         } catch (IOException e) {
             log.error("Error while reading Message Command", e);
+            return OperationStatus.failure(e.getMessage());
         }
     }
 
@@ -94,6 +90,7 @@ public class MessageCommandConsumer {
             }
         }
     }
+
 
 }
 

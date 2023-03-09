@@ -27,6 +27,35 @@ services:
   networks:
    - docker-net
 
+ redis:
+  image: 'bitnami/redis:latest'
+  environment:
+   - REDIS_PASSWORD=MyRedisPassword
+  ports:
+   - '6379:6379'
+
+ kafka:
+  image: durutheguru/wurstmeister-kafka:latest
+  platform: linux/arm64/v8
+  depends_on:
+   - zookeeper
+  ports:
+   - "9092:9092"
+  environment:
+   KAFKA_ADVERTISED_HOST_NAME: localhost
+   KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  networks:
+   - docker-net
+
+ zookeeper:
+  image: wurstmeister/zookeeper
+  ports:
+   - "2181:2181"
+  networks:
+   - docker-net
+
+
+
 networks:
  docker-net:
 

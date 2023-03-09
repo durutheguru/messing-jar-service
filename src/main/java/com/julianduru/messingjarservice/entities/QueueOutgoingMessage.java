@@ -41,6 +41,9 @@ public class QueueOutgoingMessage extends BaseEntity {
     private OperationStatus processingStatus;
 
 
+    private boolean treatImmediately;
+
+
     public static QueueOutgoingMessage from(OutgoingMessage message) {
         var msg = QueueOutgoingMessage.builder()
                 .reference(message.getReference())
@@ -49,6 +52,7 @@ public class QueueOutgoingMessage extends BaseEntity {
                 .payload(message.getPayload())
                 .status(message.getStatus())
                 .processingStatus(message.getProcessingStatus())
+                .treatImmediately(message.isTreatImmediately())
                 .build();
 
         if (message.getId() != null) {
@@ -67,6 +71,7 @@ public class QueueOutgoingMessage extends BaseEntity {
                 .payload(getPayload())
                 .status(getStatus())
                 .processingStatus(getProcessingStatus())
+                .treatImmediately(isTreatImmediately())
                 .build();
 
         if (getId() != null) {
@@ -77,5 +82,6 @@ public class QueueOutgoingMessage extends BaseEntity {
     }
 
 
-
 }
+
+
