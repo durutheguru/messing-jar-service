@@ -1,6 +1,9 @@
 package com.julianduru.messingjarservice.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,6 +15,9 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @Document
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class GroupMessage extends BaseEntity {
 
 

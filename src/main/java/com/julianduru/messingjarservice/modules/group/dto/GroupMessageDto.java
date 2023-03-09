@@ -26,6 +26,9 @@ public class GroupMessageDto {
     private String from;
 
 
+    private String groupId;
+
+
     private String message;
 
 
