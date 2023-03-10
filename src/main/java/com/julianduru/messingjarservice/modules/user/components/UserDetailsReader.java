@@ -29,12 +29,12 @@ public class UserDetailsReader {
 
 
     public Mono<UserDataDto> fetchUserDetails(String username) {
-        userSaver.saveUser(
+        var user = userSaver.saveUser(
             UserDto
                 .builder()
                 .username(username)
                 .build()
-        );
+        ).toFuture().join();
 
         var userSettingsMono = settingsRepository
             .findByUsername(username)
@@ -58,6 +58,7 @@ public class UserDetailsReader {
 
                 var dto = new UserDataDto();
 
+                dto.setUserId(user.getIdString());
                 dto.setUsername(oauthUserData.getUsername());
                 dto.setEmail(oauthUserData.getEmail());
                 dto.setFirstName(oauthUserData.getFirstName());

@@ -20,17 +20,16 @@ public class UserSaver {
     private final UserRepository userRepository;
 
 
-    public void saveUser(UserDto userDto) {
+    public Mono<User> saveUser(UserDto userDto) {
         if (userRepository.existsByUsername(userDto.getUsername())) {
-            return;
+            return userRepository.findByUsername(userDto.getUsername());
         }
 
-        Mono.just(new User())
+        return Mono.just(new User())
             .flatMap(u -> {
                 u.setUsername(userDto.getUsername());
                 return userRepository.save(u);
-            })
-            .subscribe();
+            });
     }
 
 

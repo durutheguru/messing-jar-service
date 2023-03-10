@@ -105,7 +105,9 @@ public class InitializeGroupCommandHandler implements MessageCommandHandler {
                             .history(
                                 messages.stream()
                                     .sorted(Comparator.comparing(BaseEntity::getCreatedDate))
-                                    .map(GroupMessageDto::from)
+                                    .map(m -> GroupMessageDto.from(m, userDetails.stream()
+                                        .filter(usr -> usr.getUserId().equals(m.getFromUserId().toString()))
+                                        .findFirst().orElse(null)))
                                     .toList()
                             )
                             .build();

@@ -12,6 +12,9 @@ import javax.validation.constraints.Size;
 public class UserDataDto {
 
 
+    private String userId;
+
+
     @NotEmpty(message = "Username is required")
     private String username;
 

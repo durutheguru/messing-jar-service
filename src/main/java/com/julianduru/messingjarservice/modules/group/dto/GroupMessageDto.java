@@ -2,6 +2,7 @@ package com.julianduru.messingjarservice.modules.group.dto;
 
 import com.julianduru.messingjarservice.entities.ChatMessageType;
 import com.julianduru.messingjarservice.entities.GroupMessage;
+import com.julianduru.messingjarservice.modules.user.dto.UserDataDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,6 +39,9 @@ public class GroupMessageDto {
     private ZonedDateTime timeSent;
 
 
+    private UserDataDto senderDetails;
+
+
 
     public static GroupMessageDto from(GroupMessage msg) {
         return GroupMessageDto.builder()
@@ -53,6 +57,22 @@ public class GroupMessageDto {
             .build();
     }
 
+
+    public static GroupMessageDto from(GroupMessage msg, UserDataDto userDataDto) {
+        return GroupMessageDto.builder()
+            .id(msg.getIdString())
+            .from(msg.getFromUserId().toString())
+            .message(msg.getMessage())
+            .timeSent(
+                msg.getCreatedDate() != null ?
+                    ZonedDateTime.of(msg.getCreatedDate(), ZoneId.systemDefault()) :
+                    null
+            )
+            .type(msg.getType())
+            .senderDetails(userDataDto)
+            .groupId(msg.getGroupId().toString())
+            .build();
+    }
 
 
 }

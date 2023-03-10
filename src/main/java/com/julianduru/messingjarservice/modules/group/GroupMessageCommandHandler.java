@@ -8,12 +8,12 @@ import com.julianduru.messingjarservice.modules.messaging.MessageCommand;
 import com.julianduru.messingjarservice.modules.messaging.MessageCommandHandler;
 import com.julianduru.messingjarservice.modules.user.NotificationService;
 import com.julianduru.messingjarservice.modules.user.UserRepository;
+import com.julianduru.messingjarservice.modules.user.UserService;
 import com.julianduru.util.JSONUtil;
 import com.julianduru.util.api.OperationStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -36,6 +36,8 @@ public class GroupMessageCommandHandler implements MessageCommandHandler {
     private final GroupMessageRepository groupMessageRepository;
 
     private final GroupUserRepository groupUserRepository;
+
+    private final UserService userService;
 
     private final NotificationService notificationService;
 
@@ -61,6 +63,8 @@ public class GroupMessageCommandHandler implements MessageCommandHandler {
 
         var senderDetails = userRepository.findByUsername(sender)
             .toFuture().join();
+        var senderFullDetails = userService.fetchUserDetails(senderDetails.getId())
+            .toFuture().join();
 
         group.setLastMessageTimestamp(ZonedDateTime.now());
         return groupRepository.save(group)
@@ -78,7 +82,7 @@ public class GroupMessageCommandHandler implements MessageCommandHandler {
                 var page = 0;
                 var size = 100;
 
-                var groupMessageDto = GroupMessageDto.from(message);
+                var groupMessageDto = GroupMessageDto.from(message, senderFullDetails);
 
                 while(!(groupUsers = groupUserRepository.findGroupUsersByGroupId(
                     group.getId(), PageRequest.of(page++, size)
